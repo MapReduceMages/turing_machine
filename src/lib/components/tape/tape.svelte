@@ -6,13 +6,13 @@
   const BORDER_SHIFT = 1;
   const HEAD_WIDTH = 3;
   const tape = Array(TAPE_CELL_NUMBER)
-    .fill(0)
-    .map((_, i) => i);
+    .fill("_")
   const cellSize = 42; // px
   const tapeContainerCellNumber = 11;
   const tapeContainerWidth = tapeContainerCellNumber * cellSize; // px
 
-  let index = 10;
+  let center = Math.floor(tape.length / 2);
+  let index = center;
   let tapeWidth: number | undefined = undefined;
 </script>
 
@@ -40,12 +40,15 @@
         tapeShift) *
         -cellSize -
         BORDER_SHIFT}px);" -->
-      {#each tape as cell}
+      {#each tape as cell, index}
         <li
           style="min-width: {cellSize}px; height: {cellSize}px;"
-          class="flex items-center justify-center text-sm border-solid border-black border-r first:rounded-l-lg first:border-l-0 last:rounded-r-lg last:border-r-0"
+          class="relative flex items-center justify-center text-sm border-solid border-black border-r first:rounded-l-lg first:border-l-0 last:rounded-r-lg last:border-r-0"
         >
           {cell}
+          <p class="absolute -bottom-5 left-0 text-[0.6em] w-full text-center opacity-30">
+            {center - index}
+          </p>
         </li>
       {/each}
     </ul>
