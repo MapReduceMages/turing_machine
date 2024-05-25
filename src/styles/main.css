@@ -20,6 +20,10 @@ textarea {
   @apply border border-black border-solid rounded-lg px-2 bg-white h-7;
 }
 
+button {
+  @apply bg-neutral-100;
+}
+
 textarea {
   @apply resize-none py-1 !overflow-auto;
   white-space: nowrap; /* Pour empêcher les sauts de ligne */

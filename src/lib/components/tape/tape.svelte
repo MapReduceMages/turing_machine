@@ -46,7 +46,7 @@
           class="relative flex items-center justify-center text-sm border-solid border-black border-r first:rounded-l-lg first:border-l-0 last:rounded-r-lg last:border-r-0"
         >
           {cell}
-          <p class="absolute -bottom-5 left-0 text-[0.6em] w-full text-center opacity-30">
+          <p class="absolute -bottom-5 left-0 text-[0.6em] w-full text-center opacity-50">
             {center - index}
           </p>
         </li>
