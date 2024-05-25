@@ -32,36 +32,27 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<div id="instructions-container" class="flex flex-col items-center gap-box-sm w-full overflow-hidden">
+<div id="instructions-container" class="flex flex-col items-center w-full overflow-hidden my-box">
   <header>
     <h2>Instructions</h2>
     <PresetSelector />
   </header>
+  <div class="bg-neutral-100 w-full border-t border-x border-solid rounded-t-lg py-1 px-2 text-xs flex items-center justify-between">
+    <p class="text-xs italic opacity-40">JSON format</p>
+      <p class="text-xs text-right">{instructions.length} character{@html instructions.length > 0 ? "s" : "&nbsp;"}</p>
+  </div>
   <textarea
-    name=""
-    id=""
     bind:value={instructions}
-    class="inset-shadow w-full h-[200px] resize-none"
+    class="inset-shadow w-full h-[200px] resize-none !border-y-0 !rounded-none overflow-scroll"
     on:input={compileInstructions}
   ></textarea>
-  <footer>
-      <p class="text-xs italic opacity-40">JSON format</p>
-      <p class="text-xs text-right">{instructions.length} character(s)</p>
-    </footer>
+
     <Compilator error={errorMessage} empty={instructions.length === 0} />
 </div>
 
 <!-- ================================================= CSS -->
 <style lang="postcss">
   header {
-    @apply w-full flex justify-center items-center gap-box flex-wrap;
-  }
-
-  footer {
-    @apply w-full flex justify-between items-center gap-box;
-  }
-
-  footer > p {
-    @apply text-xs w-40;
+    @apply w-full flex justify-between items-center gap-box flex-wrap mb-box-sm;
   }
 </style>
