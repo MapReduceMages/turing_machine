@@ -3,7 +3,6 @@
   import PresetSelector from "./preset_selector.svelte";
   import parseJson, { JSONError } from "parse-json";
   import Compilator from "./compilator.svelte";
-  import { text } from "@sveltejs/kit";
 
   let instructions = "";
   let compiledInstructions: Object | undefined | null = null;
@@ -29,7 +28,7 @@
       cursorPosition = (textField as HTMLTextAreaElement).selectionStart;
     }
 
-    const INDEX_START = 1
+    const INDEX_START = 1;
 
     let line = INDEX_START;
     let column = INDEX_START;
@@ -108,10 +107,68 @@
 
   <Compilator error={errorMessage} empty={instructions.length === 0} />
 </div>
+<ul class="text-[0.8em]">
+  <li>
+    <p>alphabet</p>
+    <p>list of symbols that can be written on the tape</p>
+  </li>
+  <li>
+    <p>blank</p>
+    <p>symbol that represents a blank space on the tape</p>
+  </li>
+  <li>
+    <p>states</p>
+    <p>list of states that the machine can be in</p>
+  </li>
+  <li>
+    <p>initial</p>
+    <p>initial state of the machine</p>
+  </li>
+  <li>
+    <p>finals</p>
+    <p>list of final states that stop the machine</p>
+  </li>
+  <li>
+    <p>transitions</p>
+    <p>list of states corresponding transitions</p>
+  </li>
+  <li>
+    <p>
+      <span class="opacity-50">transitions.</span>read
+    </p>
+    <p>symbol that the machine is looking for</p>
+  </li>
+  <li>
+    <p>
+      <span class="opacity-50">transitions.</span>to_state
+    </p>
+    <p>state that the machine will transition to</p>
+  </li>
+  <li>
+    <p>
+      <span class="opacity-50">transitions.</span>write
+    </p>
+    <p>symbol that the machine will write on the tape</p>
+  </li>
+  <li>
+    <p>
+      <span class="opacity-50">transitions.</span>action
+    </p>
+    <p>action that the machine will take after writing</p>
+  </li>
+</ul>
 
 <!-- ================================================= CSS -->
 <style lang="postcss">
   header {
     @apply w-full flex justify-between items-center gap-box flex-wrap mb-box-sm;
+  }
+
+  ul > li {
+    @apply flex gap-box-sm;
+  }
+
+  ul > li > p:first-of-type {
+    @apply w-36 italic;
   }
 </style>
