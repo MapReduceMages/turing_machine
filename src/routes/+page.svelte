@@ -1,8 +1,7 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
-  import Icon from "@iconify/svelte";
-  import immutableTest from "$lib/logic/immutable_test";
   import Tape from '$lib/components/tape/tape.svelte';
+  import Input from '$lib/components/instructions/instructions.svelte'
 </script>
 
 <!-- ================================================= CONTENT -->
@@ -11,13 +10,16 @@
 <h1 class="flex">test iconify <Icon icon="mdi-light:home" /></h1>
 <button class="btn btn-primary">test daisyUI</button>
 <h1>test immutable {immutableTest()}</h1> -->
-<p class="max-w-[500px] text-sm text-center italic my-box text-white">
-  Simulate the Turing machine!<br />Observe its process of reading,
-  writing, and moving, and explore the basic principles of algorithmics and
-  computability.
-</p>
-<Tape />
-<textarea name="" id="" class="inset-shadow w-[500px] h-[200px] resize-none" ></textarea>
+<!-- <div class="flex flex-col gap-box-sm items-center overflow-hidden"> -->
+  <p class="max-w-[500px] text-sm text-center italic my-box">
+    Simulate the Turing machine!<br />Observe its process of reading,
+    writing, and moving, and explore the basic principles of algorithmics and
+    computability.
+  </p>
+  <Tape />
+  <Input />
+<!-- </div> -->
+
 
 <!-- ================================================= CSS -->
 <style lang="postcss">

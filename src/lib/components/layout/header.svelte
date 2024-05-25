@@ -1,16 +1,23 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
-
+  // import Icon from "@iconify/svelte";
 </script>
+
 <!-- ================================================= CONTENT -->
-<header class="flex flex-col items-center">
-    <h1>Turing Machine Simulator</h1>
+<header class="flex flex-col items-center my-8">
+  <h1 class="text-center">
+    Turing Machine Simulator
+    <!-- <span
+    class="relative"
+      >Simulator<Icon
+        class="text-neutral-800 absolute -bottom-4 -right-12"
+        icon="hugeicons:tape-measure"
+        width={40}
+      /></span
+    > -->
+  </h1>
 </header>
+
 <!-- ================================================= CSS -->
 <style lang="postcss">
-    h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 1rem 0;
-    }
 </style>

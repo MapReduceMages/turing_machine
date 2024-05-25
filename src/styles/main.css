@@ -1,15 +1,34 @@
-body {
-  background-image: url("/textures/metal-1.jpg");
-  background-position: center;
-  background-size: cover;
-  /* set the best widht quality */
+* {
+  font-family: monospace;
+}
+
+div {
+  /* https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .inset-shadow {
   @apply relative z-20 overflow-hidden border border-black border-solid rounded-lg;
 }
 
-.inset-shadow:before {
+button,
+input,
+select,
+textarea {
+  @apply border border-black border-solid rounded-lg px-2 bg-white h-7;
+}
+
+textarea {
+  @apply resize-none py-2;
+}
+
+button {
+  @apply duration-200 transition-all hover:bg-neutral-300;
+}
+
+/* .inset-shadow:before {
   z-index: 1000;
   content: "";
   box-shadow: inset 0px 0px 10px rgb(149, 149, 149);
@@ -19,4 +38,29 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+} */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold;
+}
+
+h1 {
+  @apply text-4xl;
+}
+
+h2 {
+  @apply text-3xl;
+}
+
+h3 {
+  @apply text-2xl;
+}
+
+h4 {
+  @apply text-xl;
 }
