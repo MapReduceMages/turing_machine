@@ -20,7 +20,7 @@
   <!-- style="width: {tapeContainerWidth}px;" -->
   <div
     id="tape-visu"
-    class="inset-shadow !rounded-b-none !border-b-0 flex items-center  w-full"
+    class="inset-shadow !rounded-b-none !border-b-0 flex items-center w-full"
     bind:clientWidth={tapeWidth}
   >
     <div
@@ -63,7 +63,8 @@
   <!-- lines: before current after -->
   <!-- columns: state, value, move -->
   <div
-    class="grid grid-cols-5 gap-box-sm p-2 text-xs
+    id="debug-tape"
+    class="grid grid-cols-5 gap-box-sm p-2 text-[0.8em] md:text-xs
   "
   >
     <!-- header -->
@@ -77,19 +78,19 @@
     <p>{0}</p>
     <p>scanright</p>
     <p>x</p>
-    <p>RIGHT</p>
+    <p>right</p>
     <!-- current -->
     <p class="text-neutral-100 italic">current</p>
     <p class="text-neutral-100">{1}</p>
-    <p class="text-neutral-100">scanright</p>
+    <p class="text-neutral-100 ">scanright</p>
     <p class="text-neutral-100">y</p>
-    <p class="text-neutral-100">LEFT</p>
+    <p class="text-neutral-100">left</p>
     <!-- after -->
     <p class="italic">after</p>
     <p>{2}</p>
     <p>scanright</p>
     <p>z</p>
-    <p>RIGHT</p>
+    <p>right</p>
   </div>
 </div>
 <div style="width: {tapeContainerWidth}px;" class="overflow-hidden">
@@ -112,5 +113,9 @@
 
   ul > li {
     background-color: beige;
+  }
+
+  #debug-tape > p {
+    @apply text-ellipsis overflow-hidden;
   }
 </style>
