@@ -3,14 +3,23 @@
   import PresetSelector from "./preset_selector.svelte";
   import parseJson, { JSONError } from "parse-json";
   import Compilator from "./compilator.svelte";
+  import Helper from "./helper.svelte";
+  import { browser } from "$app/environment";
+  import Cookies from "js-cookie";
+  import { onMount } from "svelte";
 
   let instructions = "";
-  let compiledInstructions: Object | undefined | null = null;
   let errorMessage: string | null = null;
 
   let cursorPosition = 0;
-  let cursorLine = 1;
-  let cursorColumn = 1;
+  let cursorLine: number | null = null;
+  let cursorColumn: number | null = null;
+
+  let textAreaElement: HTMLTextAreaElement | null = null;
+  let textAreaElementIsFocused = false;
+  let handlePresetBack: (preset?: string) => void;
+  let lastPreset: string | null = null;
+  let lastPresetInstructions: string | null = null;
 
   function cleanJSONError(error: JSONError): string {
     const message = error.message;
@@ -23,10 +32,14 @@
   const TEXTAREA_ID = "text-field";
 
   function getCursorPosition() {
-    const textField = document.getElementById(TEXTAREA_ID);
-    if (textField !== null) {
-      cursorPosition = (textField as HTMLTextAreaElement).selectionStart;
+    if (textAreaElement === null) return;
+    if (textAreaElementIsFocused === false) {
+      cursorLine = null;
+      cursorColumn = null;
+      return;
     }
+
+    cursorPosition = textAreaElement.selectionStart;
 
     const INDEX_START = 1;
 
@@ -55,10 +68,25 @@
       return;
     }
 
-    throw new Error("Index out of bounds");
+    // Index out of bounds
+    textAreaElement.setSelectionRange(0, 0);
+    cursorLine = 1;
+    cursorColumn = 1;
   }
 
-  function compileInstructions() {
+  function compileInstructions(e: any) {
+    const newInstructions = e.target.value;
+    if (newInstructions === instructions) return;
+    instructions = newInstructions;
+    console.log("lastPreset", lastPreset);
+    if (lastPreset !== null && lastPresetInstructions === instructions) {
+      console.log("NONONONIUIIUI")
+      handlePresetBack(lastPreset);
+    } else {
+      handlePresetBack();
+    }
+
+    Cookies.set("instructions", instructions);
     getCursorPosition();
 
     try {
@@ -72,6 +100,28 @@
       }
     }
   }
+
+  function handlePreset(preset: string, value: string) {
+    instructions = value;
+    lastPreset = preset;
+    lastPresetInstructions = value;
+    getCursorPosition();
+    compileInstructions({ target: { value: instructions } });
+  }
+
+  onMount(() => {
+    if (browser) {
+      const savedInstructions = Cookies.get("instructions");
+      if (savedInstructions) {
+        instructions = savedInstructions;
+      }
+      const savedPreset = Cookies.get("preset");
+      if (savedPreset) {
+        lastPreset = savedPreset;
+        handlePresetBack(savedPreset);
+      }
+    }
+  });
 </script>
 
 <!-- ================================================= CONTENT -->
@@ -81,94 +131,58 @@
 >
   <header>
     <h2>Instructions</h2>
-    <PresetSelector />
+    <PresetSelector {handlePreset} bind:handlePresetBack={handlePresetBack} />
   </header>
   <div
     class="bg-neutral-100 w-full border-t border-x border-solid rounded-t-lg py-1 px-2 text-xs flex items-center justify-between"
   >
     <p class="text-[0.9em] italic opacity-40">JSON format</p>
     <p class="text-[0.9em] text-right">
-      Line {cursorLine}, Column {cursorColumn}
+      Line {cursorLine === null ? "?" : cursorLine}, Column {cursorColumn ===
+      null
+        ? "?"
+        : cursorColumn}
     </p>
   </div>
   <textarea
     id={TEXTAREA_ID}
+    bind:this={textAreaElement}
     spellcheck="false"
-    bind:value={instructions}
     class="inset-shadow w-full h-[200px] resize-none !border-y-0 !rounded-none overflow-scroll"
     on:input={compileInstructions}
-    on:keypress={getCursorPosition}
-    on:keydown={getCursorPosition}
-    on:pointermove={getCursorPosition}
-    on:mousemove={getCursorPosition}
-    on:keyup={getCursorPosition}
-    on:click={getCursorPosition}
-  ></textarea>
-
+    on:keypress={() => {
+      getCursorPosition();
+    }}
+    on:keydown={() => {
+      getCursorPosition();
+    }}
+    on:pointermove={() => {
+      getCursorPosition();
+    }}
+    on:mousemove={() => {
+      getCursorPosition();
+    }}
+    on:keyup={() => {
+      getCursorPosition();
+    }}
+    on:click={() => {
+      getCursorPosition();
+    }}
+    on:focus={() => {
+      textAreaElementIsFocused = true;
+    }}
+    on:blur={() => {
+      console.log("Ouiiiiiii");
+      textAreaElementIsFocused = false;
+    }}>{instructions}</textarea
+  >
   <Compilator error={errorMessage} empty={instructions.length === 0} />
 </div>
-<ul class="text-[0.8em]">
-  <li>
-    <p>alphabet</p>
-    <p>list of symbols that can be written on the tape</p>
-  </li>
-  <li>
-    <p>blank</p>
-    <p>symbol that represents a blank space on the tape</p>
-  </li>
-  <li>
-    <p>states</p>
-    <p>list of states that the machine can be in</p>
-  </li>
-  <li>
-    <p>initial</p>
-    <p>initial state of the machine</p>
-  </li>
-  <li>
-    <p>finals</p>
-    <p>list of final states that stop the machine</p>
-  </li>
-  <li>
-    <p>transitions</p>
-    <p>list of states corresponding transitions</p>
-  </li>
-  <li>
-    <p>
-      <span class="opacity-50">transitions.</span>read
-    </p>
-    <p>symbol that the machine is looking for</p>
-  </li>
-  <li>
-    <p>
-      <span class="opacity-50">transitions.</span>to_state
-    </p>
-    <p>state that the machine will transition to</p>
-  </li>
-  <li>
-    <p>
-      <span class="opacity-50">transitions.</span>write
-    </p>
-    <p>symbol that the machine will write on the tape</p>
-  </li>
-  <li>
-    <p>
-      <span class="opacity-50">transitions.</span>action
-    </p>
-    <p>action that the machine will take after writing</p>
-  </li>
-</ul>
+<Helper />
 
 <!-- ================================================= CSS -->
 <style lang="postcss">
   header {
     @apply w-full flex justify-between items-center gap-box flex-wrap mb-box-sm;
-  }
-
-  ul > li {
-    @apply flex gap-box-sm;
-  }
-
-  ul > li > p:first-of-type {
-    @apply w-36 italic;
   }
 </style>
