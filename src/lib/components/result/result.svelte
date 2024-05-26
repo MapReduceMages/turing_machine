@@ -1,52 +1,58 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
-  const resultCycles = [
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, -) -> (scanright, -, RIGHT)",
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, =) -> (eraseone, ., LEFT)",
-    "(eraseone, 1) -> (subone, =, LEFT)",
-    "(subone, 1) -> (subone, 1, LEFT)",
-    "(subone, -) -> (skip, -, LEFT)",
-    "(skip, 1) -> (scanright, ., RIGHT)",
-    "(scanright, -) -> (scanright, -, RIGHT)",
-    "(scanright, 1) -> (scanright, 1, RIGHT)",
-    "(scanright, =) -> (eraseone, ., LEFT)",
-    "(eraseone, 1) -> (subone, =, LEFT)",
-    "(subone, -) -> (skip, -, LEFT)",
-    "(skip, .) -> (skip, ., LEFT)",
-    "(skip, 1) -> (scanright, ., RIGHT)",
-    "(scanright, .) -> (scanright, ., RIGHT)",
-    "(scanright, -) -> (scanright, -, RIGHT)",
-    "(scanright, =) -> (eraseone, ., LEFT)",
-    "(eraseone, -) -> (HALT, ., LEFT)",
-  ];
+  const resultCycles = new Array(642).fill(0);
 </script>
 
 <!-- ================================================= CONTENT -->
+
 <div id="container-result" class="flex flex-col items-center w-full mt-box">
-  <header class="flex justify-between mb-2 w-full items-end">
+  <header class="flex justify-between mb-1 w-full items-end">
     <h2 class="">Result</h2>
-    <p class="opacity-50 italic">300 cycles</p>
+    <p class="opacity-50 italic">{resultCycles.length} cycles</p>
   </header>
-  <ul
-    id="result"
-    class="bg-neutral-800 text-neutral-300 rounded-lg w-full h-96 overflow-y-auto overflow-x-hidden"
+  <div
+    class="bg-neutral-800 text-neutral-100 w-full rounded-lg p-2 text-[0.8em] md:text-xs"
   >
-    {#each resultCycles as cycle, index}
-      <li
-        class="flex gap-box-sm py-1 px-2 border-b border-solid border-neutral-700"
-      >
-        <p class="w-10">{index}</p>
-        <p class="text-xs">{cycle}</p>
-      </li>
-    {/each}
-  </ul>
+    <li id="header">
+      <p class="italic">cycle</p>
+      <p class="italic">state</p>
+      <p class="italic">symbol</p>
+      <p class="italic">move</p>
+    </li>
+    <ul class="flex flex-col gap-1 h-32">
+      {#each resultCycles as resultCycle, index}
+        <li>
+          <p>{index}</p>
+          <p>scanright</p>
+          <p>x</p>
+          <p>right</p>
+        </li>
+      {/each}
+    </ul>
+  </div>
 </div>
 
 <!-- ================================================= CSS -->
 <style lang="postcss">
+  li#header {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+  ul {
+    /* @apply pr-5; */
+    @apply overflow-y-scroll;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+  ul > li,
+  li#header {
+    @apply grid grid-cols-4 transition-opacity duration-100 opacity-70 hover:opacity-100 cursor-pointer;
+  }
+  li#header {
+    @apply pb-1;
+  }
+
+  ul > li > p {
+    @apply overflow-hidden text-ellipsis text-nowrap;
+  }
 </style>

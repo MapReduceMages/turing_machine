@@ -17,8 +17,9 @@ button,
 input,
 select,
 textarea {
-  @apply border border-black border-solid rounded-lg px-2 bg-white h-7;
+  @apply border border-black border-solid rounded-lg px-2 h-7 cursor-pointer;
 }
+
 
 button {
   @apply bg-neutral-100;

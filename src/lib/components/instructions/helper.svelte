@@ -3,7 +3,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<ul class="text-[0.8em]">
+<ul class="text-[0.8em] w-full">
   <li>
     <p>alphabet</p>
     <p>list of symbols that can be written on the tape.</p>

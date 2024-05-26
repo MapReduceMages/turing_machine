@@ -29,20 +29,14 @@
       style="right: calc(50% - {HEAD_WIDTH / 2 -
         BORDER_SHIFT / 2}px); width: 3px;"
     ></div>
-    <!-- style="right: {tapeContainerWidth / 2 -
-        HEAD_WIDTH / 2 -
-        BORDER_SHIFT}px; width: {HEAD_WIDTH}px;" -->
     <ul
+      id="tape"
       class="flex border border-solid border-black rounded-lg transition-transform duration-200"
       style="margin: {cellSize / 2}px  0; transform: translateX({tapeWidth / 2 -
         cellSize * 1.5 -
         index * cellSize -
         BORDER_SHIFT / 2}px)"
     >
-      <!-- style="margin: 0 {cellSize}px; transform: translateX({(index -
-        tapeShift) *
-        -cellSize -
-        BORDER_SHIFT}px);" -->
       {#each tape as cell, index}
         <li
           style="min-width: {cellSize}px; height: {cellSize}px;"
@@ -50,7 +44,7 @@
         >
           {cell}
           <p
-            class="absolute -bottom-5 left-0 text-[0.6em] w-full text-center opacity-50"
+            class="absolute -bottom-[22px] left-0 text-[0.7em] w-full text-center opacity-60"
           >
             {center - index}
           </p>
@@ -59,39 +53,39 @@
     </ul>
   </div>
 </div>
-<div class="bg-neutral-800 text-neutral-400 w-full rounded-b-lg px-2 py-1">
-  <!-- lines: before current after -->
-  <!-- columns: state, value, move -->
-  <div
-    id="debug-tape"
-    class="grid grid-cols-5 gap-box-sm p-2 text-[0.8em] md:text-xs
-  "
-  >
-    <!-- header -->
-    <p class="invisible">nothing</p>
-    <p class="italic">cycle</p>
-    <p class="italic">state</p>
-    <p class="italic">symbol</p>
-    <p class="italic">move</p>
-    <!-- before -->
-    <p class="italic">before</p>
-    <p>{0}</p>
-    <p>scanright</p>
-    <p>x</p>
-    <p>right</p>
-    <!-- current -->
-    <p class="text-neutral-100 italic">current</p>
-    <p class="text-neutral-100">{1}</p>
-    <p class="text-neutral-100 ">scanright</p>
-    <p class="text-neutral-100">y</p>
-    <p class="text-neutral-100">left</p>
-    <!-- after -->
-    <p class="italic">after</p>
-    <p>{2}</p>
-    <p>scanright</p>
-    <p>z</p>
-    <p>right</p>
-  </div>
+<div
+  class="bg-neutral-800 text-neutral-100 w-full rounded-b-lg p-2 text-[0.8em] md:text-xs"
+>
+  <ul class="flex flex-col gap-1">
+    <li class="grid grid-cols-5 opacity-65">
+      <p class="invisible">nothing</p>
+      <p class="italic">cycle</p>
+      <p class="italic">state</p>
+      <p class="italic">symbol</p>
+      <p class="italic">move</p>
+    </li>
+    <li class="grid grid-cols-5 opacity-65">
+      <p class="italic">before</p>
+      <p>{0}</p>
+      <p>scanright</p>
+      <p>x</p>
+      <p>right</p>
+    </li>
+    <li class="grid grid-cols-5">
+      <p class=" italic">current</p>
+      <p>{1}</p>
+      <p>scanright</p>
+      <p>y</p>
+      <p>left</p>
+    </li>
+    <li class="grid grid-cols-5 opacity-65">
+      <p class="italic">after</p>
+      <p>{2}</p>
+      <p>scanright</p>
+      <p>z</p>
+      <p>right</p>
+    </li>
+  </ul>
 </div>
 <div style="width: {tapeContainerWidth}px;" class="overflow-hidden">
   <Console
@@ -111,7 +105,7 @@
     background-color: white;
   }
 
-  ul > li {
+  #tape ul > li {
     background-color: beige;
   }
 
