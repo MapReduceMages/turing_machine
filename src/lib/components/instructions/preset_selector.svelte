@@ -4,6 +4,7 @@
   import Cookies from "js-cookie";
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
+  import Config from "../../../../src/config.json"
   // ------------------------- presets
   import presetUnaryAddition from "../../data/presets/unary_addition.json";
   import presetUnarySub from "../../data/presets/unary_sub.json";
@@ -37,7 +38,7 @@
     if (value !== CUSTOM_PRESET) {
       const preset = presetTable.get(value);
       if (preset !== undefined) {
-        handlePreset(value, stringify(preset));
+        handlePreset(value, stringify(preset, { indent: Config.tabulation }));
       }
     }
   }

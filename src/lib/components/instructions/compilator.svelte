@@ -1,9 +1,10 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
-  import Instructions from "./instructions.svelte";
+  import type { InstructionSet } from "$lib/models/instruction_set";
 
   export let error: string | null = null;
   export let empty: boolean = false;
+  export let compiledInstructions: InstructionSet | null;
 </script>
 
 <!-- ================================================= CONTENT -->
@@ -22,8 +23,12 @@
       no instructions
     {:else if error !== null}
       {@html error}
-    {:else}
-      {0} alphabets, {0} states, {0} transitions, {0} instructions
+    {:else if compiledInstructions !== null}
+      {compiledInstructions.alphabet.length} alphabets, {compiledInstructions
+        .states.length} states, {Object.keys(compiledInstructions.transitions)
+        .length} transitions, {Object.values(compiledInstructions.transitions)
+        .map((transition) => transition.length)
+        .reduce((acc, length) => acc + length, 0)} instructions
     {/if}
   </p>
 </div>
@@ -33,12 +38,4 @@
   #compilator {
     @apply flex w-full text-xs bg-neutral-800 p-2 rounded-b-lg text-neutral-300 h-20 overflow-y-auto overflow-x-hidden;
   }
-
-  /* #compilator {
-    @apply flex justify-start items-start gap-box-sm;
-  }
-
-  #compilator > p:first-of-type {
-    @apply min-w-28;
-  } */
 </style>

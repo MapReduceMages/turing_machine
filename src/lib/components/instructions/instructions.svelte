@@ -6,10 +6,12 @@
   import Helper from "./helper.svelte";
   import { browser } from "$app/environment";
   import Cookies from "js-cookie";
-  import { onMount } from "svelte";
-  import { InstructionSetSchema } from "../../models/instruction_set";
+  import { onMount, tick } from "svelte";
+  import { InstructionSetSchema, type InstructionSet } from "../../models/instruction_set";
+  import Config from "../../../../src/config.json";
 
   let instructions = "";
+  let compiledInstructions: InstructionSet | null = null;
   let errorMessage: string | null = null;
 
   let cursorPosition = 0;
@@ -31,6 +33,30 @@
   }
 
   const TEXTAREA_ID = "text-field";
+
+  async function handleTabulation(e?: any) {
+    const tabulationIndent = Config.tabulation;
+    if (
+      e !== undefined &&
+      e.key === "Tab" &&
+      textAreaElement !== null &&
+      cursorColumn !== null
+    ) {
+      e.preventDefault();
+      const initialCursorPosition = textAreaElement.selectionStart;
+      const spacing = tabulationIndent - (cursorColumn % tabulationIndent);
+      instructions =
+        instructions.slice(0, initialCursorPosition) +
+        " ".repeat(spacing) +
+        instructions.slice(textAreaElement.selectionEnd);
+      lastPresetInstructions = instructions;
+      await tick();
+      const newCursorPosition = initialCursorPosition + spacing;
+      textAreaElement.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+
+    getCursorPosition();
+  }
 
   function getCursorPosition() {
     if (textAreaElement === null) return;
@@ -116,6 +142,8 @@
       errorMessage = validation.error.message;
       return;
     }
+
+    compiledInstructions = parsedInstructions as InstructionSet;
   }
 
   function handlePreset(preset: string, value: string) {
@@ -170,13 +198,8 @@
     on:keypress={() => {
       getCursorPosition();
     }}
-    on:keydown={() => {
-      getCursorPosition();
-    }}
-    on:pointermove={() => {
-      getCursorPosition();
-    }}
-    on:mousemove={() => {
+    on:keydown={(e) => {
+      handleTabulation(e);
       getCursorPosition();
     }}
     on:keyup={() => {
@@ -192,7 +215,7 @@
       textAreaElementIsFocused = false;
     }}>{instructions}</textarea
   >
-  <Compilator error={errorMessage} empty={instructions.length === 0} />
+  <Compilator error={errorMessage} empty={instructions.length === 0} {compiledInstructions} />
 </div>
 <Helper />
 
