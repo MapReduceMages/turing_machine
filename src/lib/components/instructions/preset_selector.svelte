@@ -16,7 +16,6 @@
 
   export let handlePreset: (preset: string, value: string) => void;
   export const handlePresetBack = (preset?: string) => {
-    console.log("OOO et du coup ?")
     const newPreset = preset ?? CUSTOM_PRESET;
     if (selectElement !== null) selectElement.value = newPreset;
     Cookies.set("preset", newPreset);

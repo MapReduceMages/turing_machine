@@ -46,6 +46,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/js-cookie": "^3.0.6",
+		"joi": "^17.13.1",
 		"js-cookie": "^3.0.5",
 		"json-stringify-pretty-compact": "^4.0.0",
 		"parse-json": "^8.1.0"

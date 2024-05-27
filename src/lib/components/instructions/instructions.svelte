@@ -7,6 +7,7 @@
   import { browser } from "$app/environment";
   import Cookies from "js-cookie";
   import { onMount } from "svelte";
+  import { InstructionSetSchema } from "../../models/instruction_set";
 
   let instructions = "";
   let errorMessage: string | null = null;
@@ -74,13 +75,11 @@
     cursorColumn = 1;
   }
 
-  function compileInstructions(e: any) {
+  function compileInstructions(e: any, force: boolean = false) {
     const newInstructions = e.target.value;
-    if (newInstructions === instructions) return;
+    if (newInstructions === instructions && !force) return;
     instructions = newInstructions;
-    console.log("lastPreset", lastPreset);
     if (lastPreset !== null && lastPresetInstructions === instructions) {
-      console.log("NONONONIUIIUI")
       handlePresetBack(lastPreset);
     } else {
       handlePresetBack();
@@ -89,15 +88,33 @@
     Cookies.set("instructions", instructions);
     getCursorPosition();
 
+    errorMessage = null;
+
     try {
-      errorMessage = null;
       parseJson(instructions);
     } catch (error) {
       if (error instanceof JSONError) {
         errorMessage = cleanJSONError(error);
       } else {
-        errorMessage = "Unknown error";
+        errorMessage = "Unknown error #1";
       }
+      return;
+    }
+
+    let parsedInstructions: Object | null = null;
+
+    try {
+      parsedInstructions = JSON.parse(instructions);
+    } catch (error) {
+      errorMessage = (error as JSONError).message;
+      return;
+    }
+
+    const validation = InstructionSetSchema.validate(parsedInstructions);
+
+    if (validation.error) {
+      errorMessage = validation.error.message;
+      return;
     }
   }
 
@@ -105,8 +122,8 @@
     instructions = value;
     lastPreset = preset;
     lastPresetInstructions = value;
+    compileInstructions({ target: { value: instructions } }, true);
     getCursorPosition();
-    compileInstructions({ target: { value: instructions } });
   }
 
   onMount(() => {
@@ -131,7 +148,7 @@
 >
   <header>
     <h2>Instructions</h2>
-    <PresetSelector {handlePreset} bind:handlePresetBack={handlePresetBack} />
+    <PresetSelector {handlePreset} bind:handlePresetBack />
   </header>
   <div
     class="bg-neutral-100 w-full border-t border-x border-solid rounded-t-lg py-1 px-2 text-xs flex items-center justify-between"
@@ -172,7 +189,6 @@
       textAreaElementIsFocused = true;
     }}
     on:blur={() => {
-      console.log("Ouiiiiiii");
       textAreaElementIsFocused = false;
     }}>{instructions}</textarea
   >

@@ -1,17 +1,21 @@
 import { writable } from 'svelte/store';
-import type {InstructionSet} from '../models/instruction_set';
+import type { InstructionSet } from '../models/instruction_set';
 
 function generateDefaultStore(): Readonly<InstructionSet> | null {
-    return null;
+	return null;
 }
 
-function createCount() {
+function createInstructionSetStore() {
 	const { subscribe, set, update } = writable(generateDefaultStore());
 
 	return {
 		subscribe,
-        set,
+		set: (newInstructionSet: Object) => {
+
+		},
 	};
 }
 
-export const count = createCount();
+const instructionSetStore = createInstructionSetStore();
+
+export default instructionSetStore;
