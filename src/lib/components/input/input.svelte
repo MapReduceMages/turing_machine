@@ -7,11 +7,11 @@
 <div class="flex flex-col md:flex-row gap-box-sm mb-box w-fit md:w-full">
   <input type="text" placeholder="input" />
   <div class="flex justify-center md:justify-between w-full gap-box-sm">
-    <button class="icon-btn !w-fit pr-3" on:click={() =>{}}>
+    <button class="!w-fit pr-3" on:click={() =>{}}>
       <Icon class="text-neutral-800" icon="mdi:upload" width={18} />
       <p class="ml-1">load</p>
     </button>
-    <button class="icon-btn !w-fit pr-3" on:click={() =>{}}>
+    <button class="!w-fit pr-3" on:click={() =>{}}>
       <Icon class="text-neutral-800" icon="mdi:reload" width={18} />
       <p class="ml-1">reset</p>
     </button>

@@ -7,8 +7,12 @@
   import { browser } from "$app/environment";
   import Cookies from "js-cookie";
   import { onMount, tick } from "svelte";
-  import { InstructionSetSchema, type InstructionSet } from "../../models/instruction_set";
+  import {
+    InstructionSetSchema,
+    type InstructionSet,
+  } from "../../models/instruction_set";
   import Config from "../../../../src/config.json";
+  import Icon from "@iconify/svelte";
 
   let instructions = "";
   let compiledInstructions: InstructionSet | null = null;
@@ -101,8 +105,8 @@
     cursorColumn = 1;
   }
 
-  function compileInstructions(e: any, force: boolean = false) {
-    const newInstructions = e.target.value;
+  function compileInstructions(e?: any, force: boolean = false) {
+    const newInstructions = e?.target?.value ?? instructions;
     if (newInstructions === instructions && !force) return;
     instructions = newInstructions;
     if (lastPreset !== null && lastPresetInstructions === instructions) {
@@ -154,6 +158,18 @@
     getCursorPosition();
   }
 
+  function handleClear() {
+    instructions = "";
+    compiledInstructions = null;
+    errorMessage = null;
+    lastPreset = null;
+    lastPresetInstructions = null;
+    handlePresetBack();
+    getCursorPosition();
+    Cookies.set("instructions", "");
+    Cookies.set("preset", Config.customPreset);
+  }
+
   onMount(() => {
     if (browser) {
       const savedInstructions = Cookies.get("instructions");
@@ -165,6 +181,7 @@
         lastPreset = savedPreset;
         handlePresetBack(savedPreset);
       }
+      compileInstructions(undefined, true);
     }
   });
 </script>
@@ -172,7 +189,7 @@
 <!-- ================================================= CONTENT -->
 <div
   id="instructions-container"
-  class="flex flex-col items-center w-full overflow-hidden my-box"
+  class="flex flex-col items-center w-full overflow-hidden mt-box"
 >
   <header>
     <h2>Instructions</h2>
@@ -215,7 +232,25 @@
       textAreaElementIsFocused = false;
     }}>{instructions}</textarea
   >
-  <Compilator error={errorMessage} empty={instructions.length === 0} {compiledInstructions} />
+  <Compilator
+    error={errorMessage}
+    empty={instructions.length === 0}
+    {compiledInstructions}
+  />
+</div>
+<div class="flex flex-wrap items-center justify-between md:justify-end md:gap-box w-full mt-box-sm mb-box">
+  <button class="md:mr-auto !w-fit pr-3" on:click={handleClear}>
+    <Icon class="text-neutral-800" icon="ph:eraser" width={18} />
+    <p class="ml-2">clean</p>
+  </button>
+  <button class="!w-fit pr-3">
+    <Icon class="text-neutral-800" icon="uil:export" width={16} />
+    <p class="ml-2">import</p>
+  </button>
+  <button class="!w-fit pr-3">
+    <Icon class="text-neutral-800" icon="uil:import" width={16} />
+    <p class="ml-2">export</p>
+  </button>
 </div>
 <Helper />
 
@@ -223,5 +258,9 @@
 <style lang="postcss">
   header {
     @apply w-full flex justify-between items-center gap-box flex-wrap mb-box-sm;
+  }
+
+  button {
+    @apply w-20 flex items-center justify-center;
   }
 </style>

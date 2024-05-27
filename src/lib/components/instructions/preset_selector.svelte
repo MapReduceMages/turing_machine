@@ -4,7 +4,7 @@
   import Cookies from "js-cookie";
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
-  import Config from "../../../../src/config.json"
+  import Config from "../../../../src/config.json";
   // ------------------------- presets
   import presetUnaryAddition from "../../data/presets/unary_addition.json";
   import presetUnarySub from "../../data/presets/unary_sub.json";
@@ -13,11 +13,10 @@
   import preset02n from "../../data/presets/02n.json";
 
   let selectElement: HTMLSelectElement | null = null;
-  const CUSTOM_PRESET = "custom";
 
   export let handlePreset: (preset: string, value: string) => void;
   export const handlePresetBack = (preset?: string) => {
-    const newPreset = preset ?? CUSTOM_PRESET;
+    const newPreset = preset ?? Config.customPreset;
     if (selectElement !== null) selectElement.value = newPreset;
     Cookies.set("preset", newPreset);
   };
@@ -35,7 +34,7 @@
     const value = target.value;
     Cookies.set("preset", value);
 
-    if (value !== CUSTOM_PRESET) {
+    if (value !== Config.customPreset) {
       const preset = presetTable.get(value);
       if (preset !== undefined) {
         handlePreset(value, stringify(preset, { indent: Config.tabulation }));
@@ -61,7 +60,7 @@
   on:change={handleSelect}
   bind:this={selectElement}
 >
-  <option value={CUSTOM_PRESET} disabled>{CUSTOM_PRESET}</option>
+  <option value={Config.customPreset} disabled>{Config.customPreset}</option>
   <option value="unary_addition">unary addition</option>
   <option value="unary_sub">unary sub</option>
   <option value="palindrome">palindrome</option>
