@@ -71,3 +71,74 @@ h3 {
 h4 {
   @apply text-xl;
 }
+
+
+/* ============================== scrollbar */
+/* --------- light */
+.scrollbar-light::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.scrollbar-light::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-thumb {
+  @apply bg-neutral-300;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-300;
+}
+.scrollbar-light::-webkit-scrollbar-thumb:active {
+  @apply bg-neutral-300;
+}
+.scrollbar-light::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-track:hover {
+  @apply bg-neutral-100;
+}
+.scrollbar-light::-webkit-scrollbar-track:active {
+  @apply bg-neutral-100;
+}
+.scrollbar-light::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* --------- dark */
+.scrollbar-dark::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.scrollbar-dark::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-100;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb:active {
+  @apply bg-neutral-100;
+}
+.scrollbar-dark::-webkit-scrollbar-track {
+  @apply bg-neutral-800;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-track:hover {
+  @apply bg-neutral-800;
+}
+.scrollbar-dark::-webkit-scrollbar-track:active {
+  @apply bg-neutral-800;
+}
+.scrollbar-dark::-webkit-scrollbar-corner {
+  background: transparent;
+}

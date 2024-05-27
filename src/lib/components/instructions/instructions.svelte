@@ -148,7 +148,7 @@
     id={TEXTAREA_ID}
     bind:this={textAreaElement}
     spellcheck="false"
-    class="inset-shadow w-full h-[200px] resize-none !border-y-0 !rounded-none overflow-scroll"
+    class="inset-shadow w-full h-[200px] resize-none !border-y-0 !rounded-none overflow-scroll scrollbar-light"
     on:input={compileInstructions}
     on:keypress={() => {
       getCursorPosition();

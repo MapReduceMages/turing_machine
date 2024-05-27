@@ -8,7 +8,7 @@
 <div id="container-result" class="flex flex-col items-center w-full mt-box">
   <header class="flex justify-between mb-1 w-full items-end">
     <h2 class="">Result</h2>
-    <p class="opacity-50 italic">{resultCycles.length} cycles</p>
+    <p class="opacity-50 italic text-xs">{resultCycles.length} cycles</p>
   </header>
   <div
     class="bg-neutral-800 text-neutral-100 w-full rounded-lg p-2 text-[0.8em] md:text-xs"
@@ -19,7 +19,7 @@
       <p class="italic">symbol</p>
       <p class="italic">move</p>
     </li>
-    <ul class="flex flex-col gap-1 h-32">
+    <ul class="flex flex-col gap-1 h-32 scrollbar-dark">
       {#each resultCycles as resultCycle, index}
         <li>
           <p>{index}</p>
@@ -35,13 +35,12 @@
 <!-- ================================================= CSS -->
 <style lang="postcss">
   li#header {
-    overflow-y: auto;
-    scrollbar-gutter: stable;
+    @apply pr-2;
   }
   ul {
     /* @apply pr-5; */
     @apply overflow-y-scroll;
-    overflow-y: auto;
+    overflow-y: scroll;
     scrollbar-gutter: stable;
   }
   ul > li,

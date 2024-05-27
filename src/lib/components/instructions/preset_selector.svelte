@@ -61,7 +61,7 @@
   on:change={handleSelect}
   bind:this={selectElement}
 >
-  <option value={CUSTOM_PRESET}>{CUSTOM_PRESET}</option>
+  <option value={CUSTOM_PRESET} disabled>{CUSTOM_PRESET}</option>
   <option value="unary_addition">unary addition</option>
   <option value="unary_sub">unary sub</option>
   <option value="palindrome">palindrome</option>
