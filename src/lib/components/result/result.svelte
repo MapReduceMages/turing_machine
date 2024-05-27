@@ -30,7 +30,7 @@
       {/each}
     </ul>
   </div>
-  <p class="text-xs w-full text-right mt-1 italic opacity-50">Click on a cycle to view its details in the tape debugger
+  <p class="text-[0.8em] w-full text-right mt-1 italic opacity-50">Click on a cycle to view its details in the tape debugger
 
   </p>
 </div>
