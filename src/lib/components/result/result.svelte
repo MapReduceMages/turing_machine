@@ -19,7 +19,7 @@
       <p class="italic">symbol</p>
       <p class="italic">move</p>
     </li>
-    <ul class="flex flex-col gap-1 h-32 scrollbar-dark">
+    <ul class="flex flex-col gap-1 h-[242px] scrollbar-dark">
       {#each resultCycles as resultCycle, index}
         <li>
           <p>{index}</p>
@@ -30,6 +30,9 @@
       {/each}
     </ul>
   </div>
+  <p class="text-xs w-full text-right mt-1 italic opacity-50">Click on a cycle to view its details in the tape debugger
+
+  </p>
 </div>
 
 <!-- ================================================= CSS -->

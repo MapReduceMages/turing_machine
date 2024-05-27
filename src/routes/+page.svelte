@@ -4,6 +4,7 @@
   import Tape from "$lib/components/tape/tape.svelte";
   import Instructions from "$lib/components/instructions/instructions.svelte";
   import Result from "$lib/components/result/result.svelte";
+  import About from "$lib/components/about/about.svelte";
 </script>
 
 <!-- ================================================= CONTENT -->
@@ -16,6 +17,7 @@
 <Tape />
 <Instructions />
 <Result />
+<About />
 
 <!-- ================================================= CSS -->
 <style lang="postcss">

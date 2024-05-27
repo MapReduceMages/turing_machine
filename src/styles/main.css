@@ -72,6 +72,14 @@ h4 {
   @apply text-xl;
 }
 
+b {
+  @apply font-bold;
+}
+
+a {
+  @apply text-blue-500 hover:underline;
+}
+
 
 /* ============================== scrollbar */
 /* --------- light */
