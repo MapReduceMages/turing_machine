@@ -14,6 +14,7 @@
   } from "../../models/instruction_set";
   import Config from "../../../../src/config.json";
   import Icon from "@iconify/svelte";
+  import stringify from "json-stringify-pretty-compact";
 
   let instructions = "";
   let compiledInstructions: InstructionSet | null = null;
@@ -28,6 +29,41 @@
   let handlePresetBack: (preset?: string) => void;
   let lastPreset: string | null = null;
   let lastPresetInstructions: string | null = null;
+
+  let importFiles: null | FileList = null;
+  let importFileInputElement: HTMLInputElement | null = null;
+
+  $: if (importFiles !== null) {
+    // Note that `importFiles` is of type `FileList`, not an Array:
+    // https://developer.mozilla.org/en-US/docs/Web/API/FileList
+    for (const file of importFiles) {
+      (file as File).text().then((text) => {
+        instructions = text.trim();
+        compileInstructions({ target: { value: instructions } }, true);
+      });
+    }
+  }
+
+  function handleImport() {
+    if (importFileInputElement !== null) {
+      importFileInputElement.click();
+    }
+  }
+
+  function handleExport() {
+    if (compiledInstructions !== null) {
+      const blob = new Blob([stringify(compiledInstructions)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      // add timestamp
+      a.download = `instructions-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
 
   function cleanJSONError(error: JSONError): string {
     const message = error.message;
@@ -126,6 +162,7 @@
     } catch (error) {
       if (error instanceof JSONError) {
         errorMessage = cleanJSONError(error);
+        compiledInstructions = null;
       } else {
         errorMessage = "Unknown error during the parsing of the JSON";
       }
@@ -138,11 +175,13 @@
       parsedInstructions = JSON.parse(instructions);
     } catch (error) {
       errorMessage = (error as JSONError).message;
+      compiledInstructions = null;
       return;
     }
 
     if (parsedInstructions === null) {
       errorMessage = "Parsed instructions are null";
+      compiledInstructions = null;
       return;
     }
 
@@ -150,12 +189,14 @@
 
     if (validation.error) {
       errorMessage = validation.error.message;
+      compiledInstructions = null;
       return;
     }
 
     const instructionSetCheck = checkInstructionSet(validation.value);
     if (instructionSetCheck !== null) {
       errorMessage = instructionSetCheck.message;
+      compiledInstructions = null;
       return;
     }
 
@@ -250,16 +291,29 @@
     {compiledInstructions}
   />
 </div>
-<div class="flex flex-wrap items-center justify-between md:justify-end md:gap-box w-full mt-box-sm mb-box">
+<div
+  class="flex flex-wrap items-center justify-between md:justify-end md:gap-box w-full mt-box-sm mb-box"
+>
   <button class="md:mr-auto !w-fit pr-3" on:click={handleClear}>
     <Icon class="text-neutral-800" icon="ph:eraser" width={18} />
     <p class="ml-2">clean</p>
   </button>
-  <button class="!w-fit pr-3">
+  <button class="!w-fit pr-3" on:click={handleImport}>
     <Icon class="text-neutral-800" icon="uil:export" width={16} />
     <p class="ml-2">import</p>
   </button>
-  <button class="!w-fit pr-3">
+  <input
+    bind:this={importFileInputElement}
+    bind:files={importFiles}
+    type="file"
+    accept=".json"
+    class="hidden"
+  />
+  <button
+    class="!w-fit pr-3"
+    on:click={handleExport}
+    disabled={compiledInstructions === null}
+  >
     <Icon class="text-neutral-800" icon="uil:import" width={16} />
     <p class="ml-2">export</p>
   </button>
