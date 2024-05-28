@@ -17,7 +17,6 @@
 
 <!-- ================================================= CONTENT -->
 <div id="tape" class="flex flex-col items-center gap-box-sm w-full">
-  <!-- style="width: {tapeContainerWidth}px;" -->
   <div
     id="tape-visu"
     class="inset-shadow !rounded-b-none !border-b-0 flex items-center w-full"
@@ -46,7 +45,7 @@
           <p
             class="absolute -bottom-[22px] left-0 text-[0.7em] w-full text-center opacity-60"
           >
-            {center - index}
+            {index - center - 1}
           </p>
         </li>
       {/each}
