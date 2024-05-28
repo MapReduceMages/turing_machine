@@ -9,6 +9,7 @@
   import { onMount, tick } from "svelte";
   import {
     InstructionSetSchema,
+    checkInstructionSet,
     type InstructionSet,
   } from "../../models/instruction_set";
   import Config from "../../../../src/config.json";
@@ -126,7 +127,7 @@
       if (error instanceof JSONError) {
         errorMessage = cleanJSONError(error);
       } else {
-        errorMessage = "Unknown error #1";
+        errorMessage = "Unknown error during the parsing of the JSON";
       }
       return;
     }
@@ -140,10 +141,21 @@
       return;
     }
 
+    if (parsedInstructions === null) {
+      errorMessage = "Parsed instructions are null";
+      return;
+    }
+
     const validation = InstructionSetSchema.validate(parsedInstructions);
 
     if (validation.error) {
       errorMessage = validation.error.message;
+      return;
+    }
+
+    const instructionSetCheck = checkInstructionSet(validation.value);
+    if (instructionSetCheck !== null) {
+      errorMessage = instructionSetCheck.message;
       return;
     }
 
