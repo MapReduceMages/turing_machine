@@ -1,4 +1,4 @@
-import { start, type Parameters, type Cycle, type Transition } from './src/lib/logic/machine.ts';
+import { start, type Parameters, type Cycle, type Transition, type MachineOutput } from './src/lib/logic/machine.ts';
 import type { InstructionSet } from './src/lib/models/instruction_set.ts';
 
 const instructionSet: InstructionSet = {
@@ -33,7 +33,7 @@ const initialTape = ["1", "1", "1", "-", "1", "1", "=", ".", "."];
 const initialPos = 0;
 
 try {
-    start
+    const result = start
         (<Parameters>{
             finals: instructionSet.finals,
             transitions: new Map<string, Transition[]>(Object.entries(instructionSet.transitions).map(([key, value]) => [key, value.map(t => <Transition>{
@@ -54,6 +54,7 @@ try {
             },
             limit: 100
         });
+        console.log(result.states.toArray());
 } catch (error: any) {
     console.error(error.message);
 }
