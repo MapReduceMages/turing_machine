@@ -1,5 +1,7 @@
 import Immutable from "immutable";
 
+// ------------------------------------------------ Turing types
+const SHIFT_STEP = 1;
 export type Direction = Readonly<'LEFT' | 'RIGHT'>;
 export type Transitions = Immutable.Map<string, Transition[]>
 export type Parameters = Readonly<{
@@ -24,20 +26,22 @@ export type MachineOutput = Readonly<{
     readonly error?: Error
 }>;
 
+// ------------------------------------------------ Turing visualize
 function visualize(tape: Tape, headPosition: number, currentSymbol: string, previousTransition: Transition, nextTransition: Transition) {
-    process.stdout.write("[");
-    tape.forEach((symbol, index) => index === headPosition ? process.stdout.write(`<${symbol}>`) : process.stdout.write(`${symbol}`));
-    process.stdout.write("]");
-    console.log(` (${previousTransition.toState}, ${currentSymbol}) -> (${nextTransition.toState}, ${nextTransition.write}, ${nextTransition.move})`);
+    const tapeShow = "[" + tape.map((symbol, index): string => index === headPosition ? `<${symbol}>` : `${symbol}`).join("") + "]";
+    const transitionShow = `(${previousTransition.toState}, ${currentSymbol}) -> (${nextTransition.toState}, ${nextTransition.write}, ${nextTransition.move})`;
+    console.log(`${tapeShow} ${transitionShow}`);
 }
 
+// ------------------------------------------------ Turing helper functions
 const finalReached = (finals: Immutable.List<string>) => (symbol: string): boolean => finals.includes(symbol);
 const limitReached = (currentLimit: number): boolean => currentLimit === 0;
-const moveHead = (headposition: number) => (direction: Direction): number => direction === "LEFT" ? headposition - 1 : headposition + 1;
+const moveHead = (headposition: number) => (direction: Direction): number => direction === "LEFT" ? headposition - SHIFT_STEP : headposition + SHIFT_STEP;
 const updateTape = (tape: Tape) => (headPosition: number) => (newSymbol: string): Tape => tape.set(headPosition, newSymbol);
 const getNextTransition = (transitions: Transitions) => (previousCycle: Cycle) => (currentSymbol: string): Transition | Error =>
     transitions.get(previousCycle.transition.toState)?.find(transition => transition.read === currentSymbol) ?? new Error(`No transition defined for state ${previousCycle.transition.toState} and symbol ${currentSymbol}`);
 
+// ------------------------------------------------ Turing main function
 export const run = (parameters: Parameters) => (tape: Tape) => (cycle: Cycle): Readonly<MachineOutput> => {
     const previousTransition = cycle.transition;
     const currentState = previousTransition.toState;
