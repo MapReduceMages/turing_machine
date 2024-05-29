@@ -1,35 +1,5 @@
-import { start, type Parameters, type Cycle, type Transition } from './src/lib/logic/machine_3.ts';
-// import { run } from './src/lib/logic/machine.ts';
-import type { TransitionMap } from './src/lib/logic/machine.ts';
+import { start, type Parameters, type Cycle, type Transition } from './src/lib/logic/machine.ts';
 import type { InstructionSet } from './src/lib/models/instruction_set.ts';
-
-// const inputTransitions: TransitionMap = {
-//     "scanright": {
-//         '.': { write: ".", toState: "scanright", action: "RIGHT" },
-//         '1': { write: "1", toState: "scanright", action: "RIGHT" },
-//         '-': { write: "-", toState: "scanright", action: "RIGHT" },
-//         '=': { write: "=", toState: "eraseone", action: "LEFT" },
-//     },
-//     "eraseone": {
-//         '1': { write: "=", toState: "subone", action: "LEFT" },
-//         '-': { write: ".", toState: "HALT", action: "LEFT" },
-//     },
-//     "subone": {
-//         '1': { write: "1", toState: "subone", action: "LEFT" },
-//         '-': { write: "-", toState: "skip", action: "LEFT" },
-//     },
-//     "skip": {
-//         ".": { write: ".", toState: "skip", action: "LEFT" },
-//         "1": { write: ".", toState: "scanright", action: "RIGHT" },
-//     }
-// };
-
-// try {
-//     run({ tape: "111-11=".split(''), headPosition: 0, currentState: "scanright" })(inputTransitions);
-// } catch (error: any) {
-//     console.error(error.message);
-// }
-
 
 const instructionSet: InstructionSet = {
     alphabet: ['1', '.', '-', '='],
@@ -63,7 +33,6 @@ const initialTape = ["1", "1", "1", "-", "1", "1", "=", ".", "."];
 const initialPos = 0;
 
 try {
-    // run({ tape: "111-11=".split(''), headPosition: 0, currentState: "scanright" })(instructionSet);
     start
         (<Parameters>{
             finals: instructionSet.finals,
