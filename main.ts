@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { run, type Parameters, type Cycle, type Transition, type MachineOutput } from './src/lib/logic/machine.ts';
+import { run} from './src/lib/logic/machine.ts';
 import type { InstructionSet } from './src/lib/models/instruction_set.ts';
 
 const instructionSet: InstructionSet = {
@@ -31,31 +31,11 @@ const instructionSet: InstructionSet = {
 };
 
 const initialTape = Immutable.List(["1", "1", "1", "-", "1", "1", "=", ".", "."]);
-const initialPos = 0;
 
 try {
-    const result = run
-        (<Parameters>{
-            finals: Immutable.List<string>(instructionSet.finals),
-            transitions: Immutable.Map<string, Transition[]>(Object.entries(instructionSet.transitions).map(([key, value]) => [key, value.map(t => <Transition>{
-                read: t.read,
-                write: t.write,
-                toState: t.to_state,
-                move: t.action === "LEFT" ? "LEFT" : "RIGHT"
-            })]))
-        })
-        (initialTape)
-        (<Cycle>{
-            headPosition: initialPos,
-            transition: <Transition>{
-                move: "RIGHT",
-                toState: "scanright",
-                read: "1",
-                write: "1"
-            },
-            limit: 100
-        });
-        console.log(result.states.toArray());
+    const result = run(instructionSet, initialTape.toArray(), 100);
+
+    console.log(result.states.toArray());
 } catch (error: any) {
     console.error(error.message);
 }
