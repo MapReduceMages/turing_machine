@@ -1,0 +1,182 @@
+* {
+  font-family: monospace;
+}
+
+::-moz-selection {
+  /* Code for Firefox */
+  @apply bg-neutral-800;
+  color: rgb(255, 238, 164);
+}
+
+::selection {
+  @apply bg-neutral-800;
+  color: rgb(255, 238, 164);
+}
+
+div {
+  /* https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.inset-shadow {
+  @apply relative z-20 overflow-hidden border border-black border-solid rounded-lg;
+}
+
+button,
+input,
+select,
+textarea {
+  @apply border border-black border-solid rounded-lg px-2 h-7;
+}
+
+button:not(:disabled),
+input:not(:disabled),
+select:not(:disabled) {
+  @apply cursor-pointer;
+}
+
+textarea {
+  @apply resize-none py-1 !overflow-auto;
+  white-space: nowrap; /* Pour empêcher les sauts de ligne */
+  overflow-x: auto;
+}
+
+button,
+select {
+  @apply duration-200 transition-all bg-neutral-100 hover:bg-neutral-300;
+}
+
+button > p {
+  @apply -mb-[1px];
+}
+
+button:disabled {
+  @apply opacity-50 cursor-not-allowed hover:!bg-neutral-100;
+}
+
+/* .inset-shadow:before {
+  z-index: 1000;
+  content: "";
+  box-shadow: inset 0px 0px 10px rgb(149, 149, 149);
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+} */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold;
+}
+
+h1 {
+  @apply text-4xl;
+}
+
+h2 {
+  @apply text-3xl;
+}
+
+h3 {
+  @apply text-2xl;
+}
+
+h4 {
+  @apply text-xl;
+}
+
+b {
+  @apply font-bold;
+}
+
+a {
+  @apply text-blue-500 hover:underline;
+}
+
+/* ============================== scrollbar */
+.scrollbar-light::-webkit-scrollbar,
+.scrollbar-light::-webkit-scrollbar-button,
+.scrollbar-light::-webkit-scrollbar-thumb,
+.scrollbar-light::-webkit-scrollbar-track,
+.scrollbar-dark::-webkit-scrollbar,
+.scrollbar-dark::-webkit-scrollbar-button,
+.scrollbar-dark::-webkit-scrollbar-thumb,
+.scrollbar-dark::-webkit-scrollbar-track {
+  @apply !cursor-pointer;
+}
+/* --------- light */
+.scrollbar-light::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.scrollbar-light::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-thumb {
+  @apply bg-neutral-300;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-300;
+}
+.scrollbar-light::-webkit-scrollbar-thumb:active {
+  @apply bg-neutral-300;
+}
+.scrollbar-light::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-light::-webkit-scrollbar-track:hover {
+  @apply bg-neutral-100;
+}
+.scrollbar-light::-webkit-scrollbar-track:active {
+  @apply bg-neutral-100;
+}
+.scrollbar-light::-webkit-scrollbar-corner {
+  @apply bg-neutral-300;
+}
+/* --------- dark */
+.scrollbar-dark::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.scrollbar-dark::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-100;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb:active {
+  @apply bg-neutral-100;
+}
+.scrollbar-dark::-webkit-scrollbar-track {
+  @apply bg-neutral-800;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+.scrollbar-dark::-webkit-scrollbar-track:hover {
+  @apply bg-neutral-800;
+}
+.scrollbar-dark::-webkit-scrollbar-track:active {
+  @apply bg-neutral-800;
+}
+.scrollbar-dark::-webkit-scrollbar-corner {
+  background: transparent;
+}
