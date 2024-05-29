@@ -12,11 +12,11 @@
           >Turing machine</a
         ></b
       >, conceptualized by British mathematician
-      <b><a target="_blank" href="https://fr.wikipedia.org/wiki/Alan_Turing">Alan Turing</a></b>
+      <b><a target="_blank" href="https://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a></b>
       in
       <b>1936</b>, was introduced in his paper "On Computable Numbers", with an
       Application to the
-      <a target="_blank" href="Entscheidungsproblem">Entscheidungsproblem</a>. This work was
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Entscheidungsproblem">Entscheidungsproblem</a>. This work was
       pivotal in the emerging fields of mathematical logic and computation
       theory in the early 20th century.
     </p>
@@ -26,7 +26,7 @@
       During <b>World War II</b>, Alan Turing played a crucial role in breaking
       the
       <b
-        ><a target="_blank" href="https://fr.wikipedia.org/wiki/Enigma_(machine)"
+        ><a target="_blank" href="https://en.wikipedia.org/wiki/Enigma_(machine)"
           >Nazi Enigma code</a
         ></b
       >

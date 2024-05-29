@@ -1,0 +1,18 @@
+name: Check Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run_quality_steps:
+    strategy:
+      matrix:
+        cmd: ["lint", "test"]
+    uses: ./.github/workflows/run_npm_cmd.yml
+    with:
+      cmd: ${{ matrix.cmd }}
