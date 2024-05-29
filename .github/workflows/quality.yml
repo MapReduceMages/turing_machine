@@ -1,0 +1,25 @@
+name: Check Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run_quality_steps:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cmd: ["lint", "test"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run npm command
+        uses: ./.github/workflows/run_npm_cmd.yml
+        with:
+          cmd: ${{ matrix.cmd }}
