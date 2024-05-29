@@ -59,9 +59,12 @@ const getNextTransition = (parameters: Parameters) => (previousCycle: Cycle) => 
 }
 
 export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: Cycle): MachineOutput => {
-    const currentSymbol = tape[previousCycle.headPosition];
+    const currentHeadPosition = previousCycle.headPosition;
+    const currentTransition = previousCycle.transition;
+    const currentState = currentTransition.toState;
+    const currentSymbol = tape[currentHeadPosition];
 
-    if (shouldHalt(parameters.finals)(previousCycle.transition.toState) || previousCycle.limit === 0) return {
+    if (shouldHalt(parameters.finals)(currentState) || previousCycle.limit === 0) return {
         tape,
         states: Immutable.List([])
     }
@@ -73,21 +76,22 @@ export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: C
         error: nextTransition
     }
 
-    visualize(tape, previousCycle.headPosition, currentSymbol, previousCycle.transition, nextTransition); // dbg, side effect
+    visualize(tape, currentHeadPosition, currentSymbol, currentTransition, nextTransition); // dbg, side effect
 
+    const nextHeadPosition = moveHead(currentHeadPosition)(nextTransition.move);
+    const nextLimit = previousCycle.limit - 1;
     const nextCycle = {
         transition: nextTransition,
-        headPosition: moveHead(previousCycle.headPosition)(nextTransition.move),
-        limit: previousCycle.limit - 1
+        headPosition: nextHeadPosition,
+        limit: nextLimit
     };
-    const nextReturn = run(parameters)(
-        updateTape(tape)(previousCycle.headPosition)(nextTransition.write)
-    )(nextCycle);
-    if (nextReturn.error instanceof Error) return nextReturn;
+    const nextTape = updateTape(tape)(currentHeadPosition)(nextTransition.write)
+    const nextReturn = run(parameters)(nextTape)(nextCycle);
 
     return {
         tape: nextReturn.tape,
-        states: nextReturn.states.push(nextCycle)
+        states: nextReturn.states.push(nextCycle),
+        error: nextReturn.error
     };
 }
 
