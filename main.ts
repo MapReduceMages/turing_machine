@@ -1,4 +1,5 @@
-import { start, type Parameters, type Cycle, type Transition, type MachineOutput } from './src/lib/logic/machine.ts';
+import Immutable from 'immutable';
+import { run, type Parameters, type Cycle, type Transition, type MachineOutput } from './src/lib/logic/machine.ts';
 import type { InstructionSet } from './src/lib/models/instruction_set.ts';
 
 const instructionSet: InstructionSet = {
@@ -29,14 +30,14 @@ const instructionSet: InstructionSet = {
     }
 };
 
-const initialTape = ["1", "1", "1", "-", "1", "1", "=", ".", "."];
+const initialTape = Immutable.List(["1", "1", "1", "-", "1", "1", "=", ".", "."]);
 const initialPos = 0;
 
 try {
-    const result = start
+    const result = run
         (<Parameters>{
-            finals: instructionSet.finals,
-            transitions: new Map<string, Transition[]>(Object.entries(instructionSet.transitions).map(([key, value]) => [key, value.map(t => <Transition>{
+            finals: Immutable.List<string>(instructionSet.finals),
+            transitions: Immutable.Map<string, Transition[]>(Object.entries(instructionSet.transitions).map(([key, value]) => [key, value.map(t => <Transition>{
                 read: t.read,
                 write: t.write,
                 toState: t.to_state,

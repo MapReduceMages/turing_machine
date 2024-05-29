@@ -1,26 +1,23 @@
-type Direction = 'LEFT' | 'RIGHT';
 import Immutable from "immutable";
 
+export type Direction = Readonly<'LEFT' | 'RIGHT'>;
+export type Transitions = Immutable.Map<string, Transition[]>
 export type Parameters = Readonly<{
-    readonly finals: ReadonlyArray<string>
-    readonly transitions: Map<string, Transition[]>
+    readonly finals: Immutable.List<string>
+    readonly transitions: Transitions
 }>
-
-export interface Transition {
+export type Transition = Readonly<{
     readonly read: string;
     readonly write: string;
     readonly toState: string;
     readonly move: Direction
-}
-
-export interface Cycle {
-    transition: Transition
-    headPosition: number,
-    limit: number,
-}
-
-type Tape = Array<string>
-
+}>
+export type Cycle = Readonly<{
+    readonly transition: Transition,
+    readonly headPosition: number,
+    readonly limit: number
+}>
+export type Tape = Immutable.List<string>
 export type MachineOutput = Readonly<{
     readonly tape: Tape,
     readonly states: Immutable.List<Cycle>
@@ -29,55 +26,35 @@ export type MachineOutput = Readonly<{
 
 function visualize(tape: Tape, headPosition: number, currentSymbol: string, previousTransition: Transition, nextTransition: Transition) {
     process.stdout.write("[");
-    tape.forEach((symbol, index) => {
-        if (index === headPosition) {
-            process.stdout.write(`<${symbol}>`);
-        } else {
-            process.stdout.write(`${symbol}`);
-        }
-    })
+    tape.forEach((symbol, index) => index === headPosition ? process.stdout.write(`<${symbol}>`) : process.stdout.write(`${symbol}`));
     process.stdout.write("]");
     console.log(` (${previousTransition.toState}, ${currentSymbol}) -> (${nextTransition.toState}, ${nextTransition.write}, ${nextTransition.move})`);
 }
 
-const shouldHalt = (finals: ReadonlyArray<string>) => (symbol: string): boolean => finals.includes(symbol);
-const moveHead = (headposition: number) => (direction: Direction) => direction === "LEFT" ? headposition - 1 : headposition + 1;
-const updateTape = (tape: Tape) => (headPosition: number) => (newSymbol: string) => [...tape.slice(0, headPosition), newSymbol, ...tape.slice(headPosition + 1)];
-const getNextTransition = (parameters: Parameters) => (previousCycle: Cycle) => (currentSymbol: string): Transition | Error => {
-    const nextTransitionList = parameters.transitions.get(previousCycle.transition.toState);
-    if (!nextTransitionList) {
-        return new Error(`No transition list defined for state ${previousCycle.transition.toState}`);
-    }
+const finalReached = (finals: Immutable.List<string>) => (symbol: string): boolean => finals.includes(symbol);
+const limitReached = (currentLimit: number): boolean => currentLimit === 0;
+const moveHead = (headposition: number) => (direction: Direction): number => direction === "LEFT" ? headposition - 1 : headposition + 1;
+const updateTape = (tape: Tape) => (headPosition: number) => (newSymbol: string): Tape => tape.set(headPosition, newSymbol);
+const getNextTransition = (transitions: Transitions) => (previousCycle: Cycle) => (currentSymbol: string): Transition | Error =>
+    transitions.get(previousCycle.transition.toState)?.find(transition => transition.read === currentSymbol) ?? new Error(`No transition defined for state ${previousCycle.transition.toState} and symbol ${currentSymbol}`);
 
-    const nextTransition = nextTransitionList.find(transition => transition.read === currentSymbol);
-    if (!nextTransition) {
-        return new Error(`No transition defined for state ${previousCycle.transition.toState} and symbol ${currentSymbol}`);
-    }
-
-    return nextTransition;
-}
-
-export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: Cycle): MachineOutput => {
-    const previousTransition = previousCycle.transition;
+export const run = (parameters: Parameters) => (tape: Tape) => (cycle: Cycle): Readonly<MachineOutput> => {
+    const previousTransition = cycle.transition;
     const currentState = previousTransition.toState;
-    const currentHeadPosition = moveHead(previousCycle.headPosition)(previousTransition.move);
-    const currentSymbol = tape[currentHeadPosition];
+    const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.move);
+    const currentSymbol = tape.get(currentHeadPosition)!;
 
-    if (shouldHalt(parameters.finals)(currentState) || previousCycle.limit === 0) return {
+    if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit)) return {
         tape,
-        states: Immutable.List([])
+        states: Immutable.List([cycle])
     }
 
-    const nextTransition = getNextTransition(parameters)(previousCycle)(currentSymbol)
-    if (nextTransition instanceof Error) return {
-        tape,
-        states: Immutable.List([]),
-        error: nextTransition
-    }
+    const nextTransition = getNextTransition(parameters.transitions)(cycle)(currentSymbol)
+    if (nextTransition instanceof Error) return { tape, states: Immutable.List([cycle]), error: nextTransition }
 
     visualize(tape, currentHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
 
-    const nextLimit = previousCycle.limit - 1;
+    const nextLimit = cycle.limit - 1;
     const nextCycle = {
         transition: nextTransition,
         headPosition: currentHeadPosition,
@@ -88,14 +65,10 @@ export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: C
 
     return {
         tape: nextReturn.tape,
-        states: nextReturn.states.push(nextCycle),
+        states: nextReturn.states.push(cycle),
         error: nextReturn.error
     };
 }
 
-export const start = (parameters: Parameters) => (tape: Tape) => (next: Cycle): MachineOutput => run(parameters)(tape)(next);
-
 // infinit tape
-// error
-// return DONE
-// immutable partout
+// visu a la fin
