@@ -27,7 +27,6 @@ export type MachineOutput = Readonly<{
     readonly error?: Error
 }>;
 
-
 function visualize(tape: Tape, headPosition: number, currentSymbol: string, previousTransition: Transition, nextTransition: Transition) {
     process.stdout.write("[");
     tape.forEach((symbol, index) => {
@@ -59,9 +58,9 @@ const getNextTransition = (parameters: Parameters) => (previousCycle: Cycle) => 
 }
 
 export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: Cycle): MachineOutput => {
-    const currentHeadPosition = previousCycle.headPosition;
-    const currentTransition = previousCycle.transition;
-    const currentState = currentTransition.toState;
+    const previousTransition = previousCycle.transition;
+    const currentState = previousTransition.toState;
+    const currentHeadPosition = moveHead(previousCycle.headPosition)(previousTransition.move);
     const currentSymbol = tape[currentHeadPosition];
 
     if (shouldHalt(parameters.finals)(currentState) || previousCycle.limit === 0) return {
@@ -76,13 +75,12 @@ export const run = (parameters: Parameters) => (tape: Tape) => (previousCycle: C
         error: nextTransition
     }
 
-    visualize(tape, currentHeadPosition, currentSymbol, currentTransition, nextTransition); // dbg, side effect
+    visualize(tape, currentHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
 
-    const nextHeadPosition = moveHead(currentHeadPosition)(nextTransition.move);
     const nextLimit = previousCycle.limit - 1;
     const nextCycle = {
         transition: nextTransition,
-        headPosition: nextHeadPosition,
+        headPosition: currentHeadPosition,
         limit: nextLimit
     };
     const nextTape = updateTape(tape)(currentHeadPosition)(nextTransition.write)
@@ -100,3 +98,4 @@ export const start = (parameters: Parameters) => (tape: Tape) => (next: Cycle): 
 // infinit tape
 // error
 // return DONE
+// immutable partout
