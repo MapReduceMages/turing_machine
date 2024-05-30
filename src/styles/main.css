@@ -1,59 +1,59 @@
 * {
-  font-family: monospace;
+	font-family: monospace;
 }
 
 ::-moz-selection {
-  /* Code for Firefox */
-  @apply bg-neutral-800;
-  color: rgb(255, 238, 164);
+	/* Code for Firefox */
+	@apply bg-neutral-800;
+	color: rgb(255, 238, 164);
 }
 
 ::selection {
-  @apply bg-neutral-800;
-  color: rgb(255, 238, 164);
+	@apply bg-neutral-800;
+	color: rgb(255, 238, 164);
 }
 
 div {
-  /* https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge */
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+	/* https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
 .inset-shadow {
-  @apply relative z-20 overflow-hidden border border-black border-solid rounded-lg;
+	@apply relative z-20 overflow-hidden rounded-lg border border-solid border-black;
 }
 
 button,
 input,
 select,
 textarea {
-  @apply border border-black border-solid rounded-lg px-2 h-7;
+	@apply h-7 rounded-lg border border-solid border-black px-2;
 }
 
 button:not(:disabled),
 input:not(:disabled),
 select:not(:disabled) {
-  @apply cursor-pointer;
+	@apply cursor-pointer;
 }
 
 textarea {
-  @apply resize-none py-1 !overflow-auto;
-  white-space: nowrap; /* Pour empêcher les sauts de ligne */
-  overflow-x: auto;
+	@apply resize-none !overflow-auto py-1;
+	white-space: nowrap; /* Pour empêcher les sauts de ligne */
+	overflow-x: auto;
 }
 
 button,
 select {
-  @apply duration-200 transition-all bg-neutral-100 hover:bg-neutral-300;
+	@apply bg-neutral-100 transition-all duration-200 hover:bg-neutral-300;
 }
 
 button > p {
-  @apply -mb-[1px];
+	@apply -mb-[1px];
 }
 
 button:disabled {
-  @apply opacity-50 cursor-not-allowed hover:!bg-neutral-100;
+	@apply cursor-not-allowed opacity-50 hover:!bg-neutral-100;
 }
 
 /* .inset-shadow:before {
@@ -74,31 +74,31 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-bold;
+	@apply font-bold;
 }
 
 h1 {
-  @apply text-4xl;
+	@apply text-4xl;
 }
 
 h2 {
-  @apply text-3xl;
+	@apply text-3xl;
 }
 
 h3 {
-  @apply text-2xl;
+	@apply text-2xl;
 }
 
 h4 {
-  @apply text-xl;
+	@apply text-xl;
 }
 
 b {
-  @apply font-bold;
+	@apply font-bold;
 }
 
 a {
-  @apply text-blue-500 hover:underline;
+	@apply text-blue-500 hover:underline;
 }
 
 /* ============================== scrollbar */
@@ -110,73 +110,73 @@ a {
 .scrollbar-dark::-webkit-scrollbar-button,
 .scrollbar-dark::-webkit-scrollbar-thumb,
 .scrollbar-dark::-webkit-scrollbar-track {
-  @apply !cursor-pointer;
+	@apply !cursor-pointer;
 }
 /* --------- light */
 .scrollbar-light::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+	width: 9px;
+	height: 9px;
 }
 .scrollbar-light::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
+	width: 0px;
+	height: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-thumb {
-  @apply bg-neutral-300;
-  border: 0px none #ffffff;
-  border-radius: 0px;
+	@apply bg-neutral-300;
+	border: 0px none #ffffff;
+	border-radius: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-thumb:hover {
-  @apply bg-neutral-300;
+	@apply bg-neutral-300;
 }
 .scrollbar-light::-webkit-scrollbar-thumb:active {
-  @apply bg-neutral-300;
+	@apply bg-neutral-300;
 }
 .scrollbar-light::-webkit-scrollbar-track {
-  @apply bg-neutral-100;
-  border: 0px none #ffffff;
-  border-radius: 0px;
+	@apply bg-neutral-100;
+	border: 0px none #ffffff;
+	border-radius: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-track:hover {
-  @apply bg-neutral-100;
+	@apply bg-neutral-100;
 }
 .scrollbar-light::-webkit-scrollbar-track:active {
-  @apply bg-neutral-100;
+	@apply bg-neutral-100;
 }
 .scrollbar-light::-webkit-scrollbar-corner {
-  @apply bg-neutral-300;
+	@apply bg-neutral-300;
 }
 /* --------- dark */
 .scrollbar-dark::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+	width: 9px;
+	height: 9px;
 }
 .scrollbar-dark::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
+	width: 0px;
+	height: 0px;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb {
-  @apply bg-neutral-400;
-  border: 0px none #ffffff;
-  border-radius: 0px;
+	@apply bg-neutral-400;
+	border: 0px none #ffffff;
+	border-radius: 0px;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb:hover {
-  @apply bg-neutral-100;
+	@apply bg-neutral-100;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb:active {
-  @apply bg-neutral-100;
+	@apply bg-neutral-100;
 }
 .scrollbar-dark::-webkit-scrollbar-track {
-  @apply bg-neutral-800;
-  border: 0px none #ffffff;
-  border-radius: 0px;
+	@apply bg-neutral-800;
+	border: 0px none #ffffff;
+	border-radius: 0px;
 }
 .scrollbar-dark::-webkit-scrollbar-track:hover {
-  @apply bg-neutral-800;
+	@apply bg-neutral-800;
 }
 .scrollbar-dark::-webkit-scrollbar-track:active {
-  @apply bg-neutral-800;
+	@apply bg-neutral-800;
 }
 .scrollbar-dark::-webkit-scrollbar-corner {
-  background: transparent;
+	background: transparent;
 }
