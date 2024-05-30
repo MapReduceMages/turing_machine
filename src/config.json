@@ -3,6 +3,12 @@
 	"customPreset": "custom",
 	"maxStateLength": 30,
 	"maxAlphabetLength": 1,
+	"steps": {
+		"min": 1,
+		"default": 100,
+		"max": 1000,
+		"step": 1
+	},
 	"action": {
 		"leftLabel": "LEFT",
 		"rightLabel": "RIGHT"

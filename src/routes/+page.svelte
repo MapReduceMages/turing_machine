@@ -13,8 +13,8 @@
 	Simulate the Turing machine!<br />Observe its process of reading, writing, and moving, and explore
 	the basic principles of algorithmics and computability.
 </p>
-<Input />
 <Tape />
+<Input />
 <Instructions />
 <Result />
 <About />

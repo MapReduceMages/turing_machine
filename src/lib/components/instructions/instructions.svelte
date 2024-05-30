@@ -15,6 +15,7 @@
 	import Config from '../../../../src/config.json';
 	import Icon from '@iconify/svelte';
 	import stringify from 'json-stringify-pretty-compact';
+	import MaxStore from '$lib/stores/max';
 
 	let instructions = '';
 	let compiledInstructions: InstructionSet | null = null;
@@ -235,7 +236,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<div id="instructions-container" class="mt-box flex w-full flex-col items-center overflow-hidden">
+<div id="instructions-container" class=" flex w-full flex-col items-center overflow-hidden">
 	<header>
 		<h2>Instructions</h2>
 		<PresetSelector {handlePreset} bind:handlePresetBack />
@@ -244,7 +245,9 @@
 		class="flex w-full items-center justify-between rounded-t-lg border-x border-t border-solid bg-neutral-100 px-2 py-1 text-xs"
 	>
 		<p class="text-[0.9em] italic opacity-40">JSON format</p>
-		<p class="text-right text-[0.9em]">
+		<p class="flex items-center text-right text-[0.9em]">
+			<Icon class="text-red-500 opacity-70" icon="ri:lock-fill" width={12} />
+			<span class="ml-1 mr-5 text-red-500 opacity-70">read-only</span>
 			Line {cursorLine === null ? '?' : cursorLine}, Column {cursorColumn === null
 				? '?'
 				: cursorColumn}
@@ -279,27 +282,42 @@
 	<Compilator error={errorMessage} empty={instructions.length === 0} {compiledInstructions} />
 </div>
 <div
-	class="mb-box mt-box-sm flex w-full flex-wrap items-center justify-between md:justify-end md:gap-box"
+	class="mb-box mt-box-sm flex w-full flex-col flex-wrap items-center justify-between gap-box-sm md:flex-row md:gap-0"
 >
-	<button class="!w-fit pr-3 md:mr-auto" on:click={handleClear}>
-		<Icon class="text-neutral-800" icon="ph:eraser" width={18} />
-		<p class="ml-2">clean</p>
-	</button>
-	<button class="!w-fit pr-3" on:click={handleImport}>
-		<Icon class="text-neutral-800" icon="uil:export" width={16} />
-		<p class="ml-2">import</p>
-	</button>
-	<input
-		bind:this={importFileInputElement}
-		bind:files={importFiles}
-		type="file"
-		accept=".json"
-		class="hidden"
-	/>
-	<button class="!w-fit pr-3" on:click={handleExport} disabled={compiledInstructions === null}>
-		<Icon class="text-neutral-800" icon="uil:import" width={16} />
-		<p class="ml-2">export</p>
-	</button>
+	<div class="flex items-center gap-box-sm">
+		<button class="!w-fit pr-3" on:click={handleClear}>
+			<Icon class="text-neutral-800" icon="ph:eraser" width={18} />
+			<p class="ml-2">clean</p>
+		</button>
+		<div class="flex items-center gap-box-sm">
+			<input
+				class="md:mr-auto"
+				min={Config.steps.min}
+				max={Config.steps.max}
+				bind:value={$MaxStore}
+				type="number"
+				step={Config.steps.step}
+			/>
+			<p class="text-xs italic">Max step(s)</p>
+		</div>
+	</div>
+	<div class="flex items-center gap-box-sm">
+		<button class="!w-fit pr-3" on:click={handleImport}>
+			<Icon class="text-neutral-800" icon="uil:export" width={16} />
+			<p class="ml-2">import</p>
+		</button>
+		<input
+			bind:this={importFileInputElement}
+			bind:files={importFiles}
+			type="file"
+			accept=".json"
+			class="hidden"
+		/>
+		<button class="!w-fit pr-3" on:click={handleExport} disabled={compiledInstructions === null}>
+			<Icon class="text-neutral-800" icon="uil:import" width={16} />
+			<p class="ml-2">export</p>
+		</button>
+	</div>
 </div>
 <Helper />
 

@@ -16,6 +16,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
+<h2 class="mb-2 w-full">Tape</h2>
 <div id="tape" class="flex w-full flex-col items-center gap-box-sm">
 	<div
 		id="tape-visu"
