@@ -6,7 +6,7 @@ const INCREMENT_INSTRUCTION_SET: InstructionSet = {
 	alphabet: ['0', '1', ' '],
 	blank: ' ',
 	states: ['right', 'carry', 'DONE'],
-	        initial: 'right',
+	initial: 'right',
 	finals: ['DONE'],
 	transitions: {
 		right: [
@@ -23,40 +23,39 @@ const INCREMENT_INSTRUCTION_SET: InstructionSet = {
 };
 
 const WRITE_RIGHT_INSTRUCTION_SET: InstructionSet = {
-			alphabet: ['0', '1'],
-			blank: '0',
-			states: ['writeRight'],
-			initial: 'writeRight',
-			finals: [''],
-			transitions: {
-				writeRight: [{ read: '0', to_state: 'writeRight', write: '1', action: 'RIGHT' }],
-			},
-}
+	alphabet: ['0', '1'],
+	blank: '0',
+	states: ['writeRight'],
+	initial: 'writeRight',
+	finals: [''],
+	transitions: {
+		writeRight: [{ read: '0', to_state: 'writeRight', write: '1', action: 'RIGHT' }],
+	},
+};
 
 describe('Turing machine error handling', () => {
-    test('Invalid instruction', () => {
-        const invalid_instruction_set: InstructionSet = {
-            alphabet: ['0', '1'],
-            blank: '0',
-            states: ['inst'],
-            initial: 'inst',
-            finals: [''],
-            transitions: {
-                writeRight: [{ read: '0', to_state: 'invalidtransition', write: '1', action: 'RIGHT' }],
-            },
-        };
+	test('Invalid instruction', () => {
+		const invalid_instruction_set: InstructionSet = {
+			alphabet: ['0', '1'],
+			blank: '0',
+			states: ['inst'],
+			initial: 'inst',
+			finals: [''],
+			transitions: {
+				writeRight: [{ read: '0', to_state: 'invalidtransition', write: '1', action: 'RIGHT' }],
+			},
+		};
 
-		const output = run(invalid_instruction_set, ['0',], 2);
-        expect(output.error).toBeDefined();
-    });
+		const output = run(invalid_instruction_set, ['0'], 2);
+		expect(output.error).toBeDefined();
+	});
 });
-
 
 describe('Turing machine simple programs', () => {
 	test('Simple increment', () => {
 		const output = run(INCREMENT_INSTRUCTION_SET, ['0', ' '], 10);
 		expect(output.tape.toArray()[0]).toEqual('1');
-        expect(output.error).toBeUndefined();
+		expect(output.error).toBeUndefined();
 	});
 });
 
@@ -64,9 +63,9 @@ describe('Turing machine infinite tape', () => {
 	test('Simple increment needs blank', () => {
 		const output = run(INCREMENT_INSTRUCTION_SET, ['0'], 10);
 		expect(output.tape.toArray()[0]).toEqual('1');
-        expect(output.error).toBeUndefined();
+		expect(output.error).toBeUndefined();
 	});
-    
+
 	test('Infinite tape right and step limit', () => {
 		const step_limit = 10;
 
