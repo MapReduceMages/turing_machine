@@ -1,10 +1,10 @@
 {
-    "tabulation": 2,
-    "customPreset": "custom",
-    "maxStateLength": 30,
-    "maxAlphabetLength": 1,
-    "action": {
-        "leftLabel": "LEFT",
-        "rightLabel": "RIGHT"
-    }
+  "tabulation": 2,
+  "customPreset": "custom",
+  "maxStateLength": 30,
+  "maxAlphabetLength": 1,
+  "action": {
+    "leftLabel": "LEFT",
+    "rightLabel": "RIGHT"
+  }
 }

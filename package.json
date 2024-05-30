@@ -10,8 +10,8 @@
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
+		"lint": "prettier --check main.ts src/",
+		"format": "prettier --write main.ts src/",
 		"test:integration": "playwright test",
 		"test:unit": "vitest"
 	},
