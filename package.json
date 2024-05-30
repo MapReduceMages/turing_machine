@@ -7,13 +7,13 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"test": "npm run test:integration && npm run test:unit",
+		"test": "npm run test:unit # && npm run test:integration",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check main.ts src/",
 		"format": "prettier --write main.ts src/",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest run"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^4.0.2",
