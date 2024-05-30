@@ -82,7 +82,7 @@
 		</li>
 	</ul>
 </div>
-<div style="width: {tapeContainerWidth}px;" class="overflow-hidden">
+<div class="overflow-hidden">
 	<Console
 		back={() => {}}
 		next={() => {}}

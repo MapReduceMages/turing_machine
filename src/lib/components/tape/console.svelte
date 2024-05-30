@@ -51,6 +51,9 @@
 		>
 	</div>
 </div>
+<p class="mb-box-sm text-[0.8em] text-center">
+	To start the simulation, load the <b>input tape</b>, compile the <b>instructions</b>, and click on the <b>start button</b>.
+</p>
 
 <!-- ================================================= CSS -->
 <style lang="postcss">

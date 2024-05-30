@@ -4,7 +4,6 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-
 <div id="container-result" class="mt-box flex w-full flex-col items-center">
 	<header class="mb-1 flex w-full items-end justify-between">
 		<h2 class="">Result</h2>
