@@ -81,7 +81,7 @@ describe('Turing machine infinite tape', () => {
 			initial: 'writeLeft',
 			finals: [''],
 			transitions: {
-				writeRight: [{ read: '0', to_state: 'writeRight', write: '1', action: 'LEFT' }],
+				writeLeft: [{ read: '0', to_state: 'writeLeft', write: '1', action: 'LEFT' }],
 			},
 		};
 
