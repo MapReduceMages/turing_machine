@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import Config from '../../config.json';
 
-function generateDefaultStore(): number | null {
+function generateDefaultStore(): number {
 	return Config.steps.default;
 }
 
@@ -9,6 +9,6 @@ function createMaxSetStore() {
 	return writable(generateDefaultStore());
 }
 
-const maxSetStore = createMaxSetStore();
+const MaxSetStore = createMaxSetStore();
 
-export default maxSetStore;
+export default MaxSetStore;

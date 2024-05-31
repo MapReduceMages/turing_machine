@@ -1,14 +1,7 @@
 import Joi from 'joi';
 import Config from '../../config.json';
+import type { Transition } from './transition';
 
-export type Direction = Readonly<'LEFT' | 'RIGHT'>;
-
-export type Transition = Readonly<{
-	readonly read: string;
-	readonly write: string;
-	readonly to_state: string;
-	readonly action: Direction;
-}>;
 
 export const TransitionSchema = Joi.object({
 	read: Joi.string().min(1).max(Config.maxAlphabetLength).required(),

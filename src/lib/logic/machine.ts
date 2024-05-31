@@ -1,26 +1,17 @@
 import Immutable from 'immutable';
-import type { InstructionSet, Transition, Direction } from '../models/instruction_set';
+import type { InstructionSet } from '../models/instruction_set';
+import type { Output } from '../models/output';
+import type { Tape } from '../models/tape';
+import type { Cycle } from '../models/cycle';
+import type { Transition, Transitions, Direction } from '../models/transition';
 
 // ------------------------------------------------ Turing types
 const SHIFT_STEP = 1;
 const DEFAULT_HEAD_POSITION = 0;
 
-type Transitions = Immutable.Map<string, Transition[]>;
 type Parameters = Readonly<{
 	readonly finals: Immutable.List<string>;
 	readonly transitions: Transitions;
-}>;
-
-type Cycle = Readonly<{
-	readonly transition: Transition;
-	readonly headPosition: number;
-	readonly limit: number;
-}>;
-type Tape = Immutable.List<string>;
-type MachineOutput = Readonly<{
-	readonly tape: Tape;
-	readonly states: Immutable.List<Cycle>;
-	readonly error?: Error;
 }>;
 
 // ------------------------------------------------ Turing visualize
@@ -44,72 +35,72 @@ function visualize(
 // ------------------------------------------------ Turing helper functions
 const finalReached =
 	(finals: Immutable.List<string>) =>
-	(symbol: string): boolean =>
-		finals.includes(symbol);
+		(symbol: string): boolean =>
+			finals.includes(symbol);
 const limitReached = (currentLimit: number): boolean => currentLimit === 0;
 const moveHead =
 	(headposition: number) =>
-	(direction: Direction): number =>
-		direction === 'LEFT' ? headposition - SHIFT_STEP : headposition + SHIFT_STEP;
+		(direction: Direction): number =>
+			direction === 'LEFT' ? headposition - SHIFT_STEP : headposition + SHIFT_STEP;
 const updateTape =
 	(tape: Tape) =>
-	(headPosition: number) =>
-	(newSymbol: string): Tape =>
-		tape.set(headPosition, newSymbol);
+		(headPosition: number) =>
+			(newSymbol: string): Tape =>
+				tape.set(headPosition, newSymbol);
 const getNextTransition =
 	(transitions: Transitions) =>
-	(previousCycle: Cycle) =>
-	(currentSymbol: string): Transition | Error =>
-		transitions
-			.get(previousCycle.transition.to_state)
-			?.find((transition) => transition.read === currentSymbol) ??
-		new Error(
-			`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
-		);
+		(previousCycle: Cycle) =>
+			(currentSymbol: string): Transition | Error =>
+				transitions
+					.get(previousCycle.transition.to_state)
+					?.find((transition) => transition.read === currentSymbol) ??
+				new Error(
+					`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
+				);
 
 // ------------------------------------------------ Turing main function
 const step =
 	(parameters: Parameters) =>
-	(tape: Tape) =>
-	(cycle: Cycle): Readonly<MachineOutput> => {
-		const previousTransition = cycle.transition;
-		const currentState = previousTransition.to_state;
-		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
-		const currentSymbol = tape.get(currentHeadPosition)!;
+		(tape: Tape) =>
+			(cycle: Cycle): Readonly<Output> => {
+				const previousTransition = cycle.transition;
+				const currentState = previousTransition.to_state;
+				const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
+				const currentSymbol = tape.get(currentHeadPosition)!;
 
-		if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit))
-			return {
-				tape,
-				states: Immutable.List([cycle]),
+				if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit))
+					return {
+						tape,
+						states: Immutable.List([cycle]),
+					};
+
+				const nextTransition = getNextTransition(parameters.transitions)(cycle)(currentSymbol);
+				if (nextTransition instanceof Error)
+					return { tape, states: Immutable.List([cycle]), error: nextTransition };
+
+				visualize(tape, currentHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
+
+				const nextLimit = cycle.limit - 1;
+				const nextCycle = {
+					transition: nextTransition,
+					headPosition: currentHeadPosition,
+					limit: nextLimit,
+				};
+				const nextTape = updateTape(tape)(currentHeadPosition)(nextTransition.write);
+				const nextReturn = step(parameters)(nextTape)(nextCycle);
+
+				return {
+					tape: nextReturn.tape,
+					states: nextReturn.states.push(cycle),
+					error: nextReturn.error,
+				};
 			};
-
-		const nextTransition = getNextTransition(parameters.transitions)(cycle)(currentSymbol);
-		if (nextTransition instanceof Error)
-			return { tape, states: Immutable.List([cycle]), error: nextTransition };
-
-		visualize(tape, currentHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
-
-		const nextLimit = cycle.limit - 1;
-		const nextCycle = {
-			transition: nextTransition,
-			headPosition: currentHeadPosition,
-			limit: nextLimit,
-		};
-		const nextTape = updateTape(tape)(currentHeadPosition)(nextTransition.write);
-		const nextReturn = step(parameters)(nextTape)(nextCycle);
-
-		return {
-			tape: nextReturn.tape,
-			states: nextReturn.states.push(cycle),
-			error: nextReturn.error,
-		};
-	};
 
 export function run(
 	instructionSet: InstructionSet,
 	tape: string[],
 	limit: number,
-): Readonly<MachineOutput> {
+): Readonly<Output> {
 	// --------------------------- Parameters functional interfacing
 	const parameters = {
 		finals: Immutable.List<string>(instructionSet.finals),

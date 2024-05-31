@@ -1,23 +1,23 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
-	const resultCycles = new Array(642).fill(0);
+	const resultSteps = new Array(642).fill(0);
 </script>
 
 <!-- ================================================= CONTENT -->
 <div id="container-result" class="mt-box flex w-full flex-col items-center">
 	<header class="mb-1 flex w-full items-end justify-between">
 		<h2 class="">Result</h2>
-		<p class="text-xs italic opacity-50">{resultCycles.length} cycles</p>
+		<p class="text-xs italic opacity-50">{resultSteps.length} step{resultSteps.length > 0 ? "s" : ""}</p>
 	</header>
 	<div class="w-full rounded-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-xs">
 		<li id="header">
-			<p class="italic">cycle</p>
+			<p class="italic">step</p>
 			<p class="italic">state</p>
 			<p class="italic">symbol</p>
 			<p class="italic">move</p>
 		</li>
 		<ul class="scrollbar-dark flex h-[242px] flex-col gap-1">
-			{#each resultCycles as resultCycle, index}
+			{#each resultSteps as resultCycle, index}
 				<li>
 					<p>{index}</p>
 					<p>scanright</p>
@@ -28,7 +28,7 @@
 		</ul>
 	</div>
 	<p class="mt-1 w-full text-right text-[0.8em] italic opacity-50">
-		Click on a cycle to view its details in the tape debugger
+		Click on a step to view its details in the tape debugger
 	</p>
 </div>
 

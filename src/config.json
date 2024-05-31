@@ -3,6 +3,7 @@
 	"customPreset": "custom",
 	"maxStateLength": 30,
 	"maxAlphabetLength": 1,
+	"inputMaxLength": 10,
 	"steps": {
 		"min": 1,
 		"default": 100,

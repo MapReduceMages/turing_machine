@@ -1,21 +1,22 @@
 import { writable } from 'svelte/store';
-import type { InstructionSet } from '../models/instruction_set';
+import type { Output } from '../models/output';
 
-function generateDefaultStore(): Readonly<InstructionSet> | null {
-	return null;
+function generateDefaultStore(): Readonly<Output> | null {
+    return null;
 }
 
 function createOutputStore() {
-	const { subscribe, set } = writable(generateDefaultStore());
+    const { subscribe, set } = writable(generateDefaultStore());
 
-	return {
-		subscribe,
-		reset: () => {
-			set(generateDefaultStore());
-		},
-	};
+    return {
+        subscribe,
+        reset: () => {
+            set(generateDefaultStore());
+        },
+        set
+    };
 }
 
-const outputStore = createOutputStore();
+const OutputStore = createOutputStore();
 
-export default outputStore;
+export default OutputStore;

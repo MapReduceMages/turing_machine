@@ -1,41 +1,41 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import OutputStore from '$lib/stores/output';
 
 	export let stop: () => void;
 	export let pause: () => void;
 	export let play: () => void;
 	export let back: () => void;
 	export let next: () => void;
-	export let reset: () => void;
 
 	export let playing = false;
 
-	const INSTANT_SPEED = 0;
-	const speeds = [INSTANT_SPEED, 1, 2, 3, 10, 30];
-	let speed: number = speeds[1];
+	const DEFAULT_SPEED = 1;
+	const speeds = [DEFAULT_SPEED, 2, 3, 10, 30, 100];
+	let speed: number = DEFAULT_SPEED;
 
 	function handleSpeed() {
-		speed = speeds[speeds.indexOf(speed) + 1] || INSTANT_SPEED;
+		speed = speeds[speeds.indexOf(speed) + 1] || DEFAULT_SPEED;
 	}
 </script>
 
 <!-- ================================================= CONTENT -->
 <div id="console">
 	<div class="control-container">
-		<button class="icon-btn" on:click={back}
+		<button class="icon-btn" on:click={back} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="mdi:arrow-left-bold" width={20} /></button
 		>
-		<button class="icon-btn" on:click={stop}
+		<button class="icon-btn" on:click={stop} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="material-symbols:stop" width={20} /></button
 		>
 
 		{#if playing}
-			<button class="icon-btn" on:click={pause}>
+			<button class="icon-btn" on:click={pause} disabled={$OutputStore === null}>
 				<Icon class="text-neutral-800" icon="material-symbols:pause" width={20} />
 			</button>
 		{:else}
-			<button class="icon-btn" on:click={play}>
+			<button class="icon-btn" on:click={play} disabled={$OutputStore === null}>
 				<Icon class="text-neutral-800" icon="material-symbols:play-arrow" width={20} />
 			</button>
 		{/if}
@@ -46,7 +46,7 @@
 				<p>x{speed}</p>
 			{/if}
 		</button>
-		<button class="icon-btn" on:click={next}
+		<button class="icon-btn" on:click={next} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="mdi:arrow-right-bold" width={20} /></button
 		>
 	</div>

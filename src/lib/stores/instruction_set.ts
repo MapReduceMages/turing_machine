@@ -13,9 +13,10 @@ function createInstructionSetStore() {
 		reset: () => {
 			set(generateDefaultStore());
 		},
+		set,
 	};
 }
 
-const instructionSetStore = createInstructionSetStore();
+const InstructionSetStore = createInstructionSetStore();
 
-export default instructionSetStore;
+export default InstructionSetStore;
