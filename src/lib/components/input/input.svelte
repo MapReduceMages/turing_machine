@@ -1,6 +1,7 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import InputStore from "$lib/stores/input";
 </script>
 
 <!-- ================================================= CONTENT -->
@@ -12,7 +13,7 @@
 	</button>
 </header>
 <div class="mb-2 flex w-fit flex-col gap-box-sm md:w-full md:flex-row">
-	<input type="text" placeholder="input tape" />
+	<input type="text" spellcheck="false" placeholder="input tape" bind:value={$InputStore} />
 	<div class="flex w-full justify-center gap-box-sm md:justify-between">
 		<button class="!w-fit pr-3" on:click={() => {}}>
 			<Icon class="text-neutral-800" icon="mdi:upload" width={18} />
