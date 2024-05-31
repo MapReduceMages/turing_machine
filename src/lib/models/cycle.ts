@@ -1,4 +1,4 @@
-import type { Transition } from "./transition"
+import type { Transition } from './transition';
 
 export type Cycle = Readonly<{
 	readonly transition: Transition;

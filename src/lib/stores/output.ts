@@ -2,19 +2,21 @@ import { writable } from 'svelte/store';
 import type { Output } from '../models/output';
 
 function generateDefaultStore(): Readonly<Output> | null {
-    return null;
+	return null;
 }
 
 function createOutputStore() {
-    const { subscribe, set } = writable(generateDefaultStore());
+	const { subscribe, set } = writable(generateDefaultStore());
 
-    return {
-        subscribe,
-        reset: () => {
-            set(generateDefaultStore());
-        },
-        set
-    };
+	return {
+		subscribe,
+		reset: () => {
+			set(generateDefaultStore());
+		},
+		set(output: Readonly<Output>) {
+			set({ ...output, states: output.states.reverse() });
+		},
+	};
 }
 
 const OutputStore = createOutputStore();

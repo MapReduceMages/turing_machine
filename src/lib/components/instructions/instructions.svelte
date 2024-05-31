@@ -140,7 +140,7 @@
 	}
 
 	function compileInstructions(e?: any, force: boolean = false) {
-		if ($OutputStore !== null) return
+		if ($OutputStore !== null) return;
 		const newInstructions = e?.target?.value ?? instructions;
 		if (newInstructions === instructions && !force) return;
 		instructions = newInstructions;
@@ -244,14 +244,17 @@
 		<PresetSelector {handlePreset} bind:handlePresetBack />
 	</header>
 	<div
-		class="flex w-full items-center justify-between rounded-t-lg border-x border-t border-solid bg-neutral-100 px-2 py-1 text-xs"
+		class="flex w-full items-center justify-between rounded-t-lg border-x border-t border-solid bg-neutral-200 px-2 py-1 text-xs"
 	>
 		<p class="text-[0.9em] italic opacity-40">JSON format</p>
+		<p
+			class="ml-auto mr-2 flex items-center text-[0.9em] italic transition-opacity duration-200"
+			style="opacity: {$OutputStore !== null ? 0.7 : 0}"
+		>
+			<Icon class="text-red-500" icon="ri:lock-fill" width={12} />
+			<span class="ml-1 mr-5 text-red-500">read-only</span>
+		</p>
 		<p class="flex items-center text-right text-[0.9em]">
-			{#if $OutputStore !== null}
-				<Icon class="text-red-500 opacity-70" icon="ri:lock-fill" width={12} />
-				<span class="ml-1 mr-5 text-red-500 opacity-70">read-only</span>
-			{/if}
 			Line {cursorLine === null ? '?' : cursorLine}, Column {cursorColumn === null
 				? '?'
 				: cursorColumn}
@@ -284,10 +287,14 @@
 			textAreaElementIsFocused = false;
 		}}>{instructions}</textarea
 	>
-	<Compilator error={errorMessage} empty={instructions.length === 0} compiledInstructions={$InstructionSetStore} />
+	<Compilator
+		error={errorMessage}
+		empty={instructions.length === 0}
+		compiledInstructions={$InstructionSetStore}
+	/>
 </div>
 <div
-	class="mb-box mt-box-sm flex w-full flex-col flex-wrap items-center justify-between gap-box-sm md:flex-row md:gap-0"
+	class="mb-box mt-box-sm flex w-full flex-col flex-wrap items-center justify-between gap-box-sm pt-[2px] md:flex-row md:gap-0"
 >
 	<div class="flex items-center gap-box-sm">
 		<button class="!w-fit pr-3" on:click={handleClear} disabled={$OutputStore !== null}>
@@ -296,7 +303,7 @@
 		</button>
 		<div class="flex items-center gap-box-sm">
 			<input
-			disabled={$OutputStore !== null}
+				disabled={$OutputStore !== null}
 				class="md:mr-auto"
 				min={Config.steps.min}
 				max={Config.steps.max}
@@ -304,7 +311,7 @@
 				type="number"
 				step={Config.steps.step}
 			/>
-			<p class="text-[0.9em] opacity-50 italic">Max step(s)</p>
+			<p class="text-[0.9em] italic opacity-50">Max step(s)</p>
 		</div>
 	</div>
 	<div class="flex items-center gap-box-sm">

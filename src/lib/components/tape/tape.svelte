@@ -2,6 +2,8 @@
 <script lang="ts">
 	import Console from './console.svelte';
 	import TapeStore from '$lib/stores/tape';
+	import OutputStore from '$lib/stores/output';
+	import StepStore from '$lib/stores/step';
 
 	const BORDER_SHIFT = 1;
 	const HEAD_WIDTH = 3;
@@ -50,44 +52,82 @@
 <div class="w-full rounded-b-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-xs">
 	<ul class="flex flex-col gap-1">
 		<li class="grid grid-cols-5 opacity-65">
-			<p class="invisible">nothing</p>
 			<p class="italic">step</p>
 			<p class="italic">state</p>
-			<p class="italic">symbol</p>
+			<p class="italic">read</p>
+			<p class="italic">write</p>
 			<p class="italic">move</p>
 		</li>
-		<li class="grid grid-cols-5 opacity-65">
-			<p class="italic">before</p>
-			<p>{0}</p>
-			<p>scanright</p>
-			<p>x</p>
-			<p>right</p>
-		</li>
-		<li class="grid grid-cols-5">
-			<p class=" italic">current</p>
-			<p>{1}</p>
-			<p>scanright</p>
-			<p>y</p>
-			<p>left</p>
-		</li>
-		<li class="grid grid-cols-5 opacity-65">
-			<p class="italic">after</p>
-			<p>{2}</p>
-			<p>scanright</p>
-			<p>z</p>
-			<p>right</p>
-		</li>
+		{#if $OutputStore !== null}
+			<li class="grid grid-cols-5 opacity-65">
+				<p style="visibility: {$StepStore === 0 ? 'hidden' : 'visible'};">
+					{$StepStore - 1} <span class="opacity-50">(-1)</span>
+				</p>
+				{#if $StepStore > 0}
+					<p>{$OutputStore?.states.get($StepStore - 1)?.transition.to_state}</p>
+					{#if $StepStore > 1}
+						<p>{$OutputStore?.states.get($StepStore - 1)?.transition.read}</p>
+						<p>
+							{$OutputStore?.states.get($StepStore - 1)?.transition.read ===
+							$OutputStore?.states.get($StepStore - 1)?.transition.write
+								? ''
+								: $OutputStore?.states.get($StepStore - 1)?.transition.write}
+						</p>
+						<p>{$OutputStore?.states.get($StepStore - 1)?.transition.action.toLowerCase()}</p>
+					{/if}
+				{/if}
+			</li>
+			<li class="grid grid-cols-5">
+				<p>{$StepStore}</p>
+				<p>
+					{$StepStore < $OutputStore.states.count()
+						? $OutputStore?.states.get($StepStore)?.transition.to_state
+						: $OutputStore?.states.get($StepStore - 1)?.transition.to_state}
+				</p>
+				{#if $StepStore > 0 && $StepStore < $OutputStore.states.count()}
+					<p>{$OutputStore?.states.get($StepStore)?.transition.read}</p>
+					<p>
+						{$OutputStore?.states.get($StepStore)?.transition.read ===
+						$OutputStore?.states.get($StepStore)?.transition.write
+							? ''
+							: $OutputStore?.states.get($StepStore)?.transition.write}
+					</p>
+					<p>{$OutputStore?.states.get($StepStore)?.transition.action.toLowerCase()}</p>
+				{/if}
+			</li>
+			<li class="grid grid-cols-5 opacity-65">
+				<p
+					style="visibility: {$StepStore === $OutputStore?.states.count() ? 'hidden' : 'visible'};"
+				>
+					{$StepStore + 1} <span class="opacity-50">(+1)</span>
+				</p>
+				{#if $StepStore < $OutputStore.states.count()}
+					<p>
+						{$StepStore < $OutputStore.states.count() - 1
+							? $OutputStore?.states.get($StepStore + 1)?.transition.to_state
+							: $OutputStore?.states.get($StepStore)?.transition.to_state}
+					</p>
+					{#if $StepStore < $OutputStore.states.count() - 1}
+						<p>{$OutputStore?.states.get($StepStore + 1)?.transition.read}</p>
+						<p>
+							{$OutputStore?.states.get($StepStore + 1)?.transition.read ===
+							$OutputStore?.states.get($StepStore + 1)?.transition.write
+								? ''
+								: $OutputStore?.states.get($StepStore + 1)?.transition.write}
+						</p>
+						<p>{$OutputStore?.states.get($StepStore + 1)?.transition.action.toLowerCase()}</p>
+					{/if}
+				{/if}
+			</li>
+		{:else}
+			<p class="invisible">...</p>
+			<div class="flex h-full w-full items-center justify-center opacity-30">no output</div>
+			<p class="invisible">...</p>
+		{/if}
 	</ul>
 </div>
 <div class="overflow-hidden">
-	<Console
-		back={() => {}}
-		next={() => {}}
-		pause={() => {}}
-		play={() => {}}
-		stop={() => {}}
-		playing={false}
-	/>
+	<Console />
 </div>
 
 <!-- ================================================= CSS -->

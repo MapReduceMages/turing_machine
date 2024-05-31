@@ -2,31 +2,88 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import OutputStore from '$lib/stores/output';
+	import TapeStore from '$lib/stores/tape';
+	import StepStore from '$lib/stores/step';
+	import InstructionSetStore from '$lib/stores/instruction_set';
+	import Config from '../../../config.json';
+	import SpeedStore from '$lib/stores/speed';
+	import { onMount } from 'svelte';
 
-	export let stop: () => void;
-	export let pause: () => void;
-	export let play: () => void;
-	export let back: () => void;
-	export let next: () => void;
-
-	export let playing = false;
-
-	const DEFAULT_SPEED = 1;
-	const speeds = [DEFAULT_SPEED, 2, 3, 10, 30, 100];
-	let speed: number = DEFAULT_SPEED;
-
-	function handleSpeed() {
-		speed = speeds[speeds.indexOf(speed) + 1] || DEFAULT_SPEED;
+	async function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
+
+	const pause = () => {
+		playing = false;
+	};
+
+	const beginning = async () => {
+		pause();
+		while ($StepStore > 0) {
+			previous();
+		}
+	};
+
+	let playing: boolean = false;
+
+	const play = async () => {
+		if (playing) {
+			return;
+		}
+
+		playing = true;
+
+		const lastStepIndex = $OutputStore!.states.count();
+		while ($StepStore < lastStepIndex) {
+			if (!playing) {
+				return;
+			}
+			next();
+			await sleep(Config.playDefaultSpeed / $SpeedStore);
+		}
+		playing = false;
+	};
+	const previous = () => {
+		const currentStepIndex = $StepStore;
+		if (currentStepIndex > 0) {
+			$StepStore--;
+			const previousStepIndex = $StepStore;
+			TapeStore.previous(
+				$OutputStore!.states.get(previousStepIndex)!,
+				$InstructionSetStore!.blank,
+				previousStepIndex === 0,
+			);
+		}
+	};
+	const next = () => {
+		const currentStepIndex = $StepStore;
+		if (currentStepIndex < $OutputStore!.states.count()) {
+			TapeStore.next(
+				$OutputStore!.states.get(currentStepIndex)!,
+				$InstructionSetStore!.blank,
+				currentStepIndex === 0,
+			);
+			$StepStore++;
+		}
+	};
+
+	onMount(() => {
+		return () => {
+			playing = false;
+		};
+	});
 </script>
 
 <!-- ================================================= CONTENT -->
 <div id="console">
 	<div class="control-container">
-		<button class="icon-btn" on:click={back} disabled={$OutputStore === null}
+		<button
+			class="icon-btn"
+			on:click={previous}
+			disabled={$OutputStore === null || $StepStore === 0}
 			><Icon class="text-neutral-800" icon="mdi:arrow-left-bold" width={20} /></button
 		>
-		<button class="icon-btn" on:click={stop} disabled={$OutputStore === null}
+		<button class="icon-btn" on:click={beginning} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="material-symbols:stop" width={20} /></button
 		>
 
@@ -39,20 +96,24 @@
 				<Icon class="text-neutral-800" icon="material-symbols:play-arrow" width={20} />
 			</button>
 		{/if}
-		<button class="icon-btn" on:click={handleSpeed}>
-			{#if speed === 0}
+		<button class="icon-btn" on:click={SpeedStore.switch}>
+			{#if $SpeedStore === 0}
 				<Icon class="text-neutral-800" icon="mdi:storm" width={20} />
 			{:else}
-				<p>x{speed}</p>
+				<p>x{$SpeedStore}</p>
 			{/if}
 		</button>
-		<button class="icon-btn" on:click={next} disabled={$OutputStore === null}
+		<button
+			class="icon-btn"
+			on:click={next}
+			disabled={$OutputStore === null || $StepStore === $OutputStore.states.count()}
 			><Icon class="text-neutral-800" icon="mdi:arrow-right-bold" width={20} /></button
 		>
 	</div>
 </div>
-<p class="mb-box-sm text-[0.8em] text-center">
-	To start the simulation, load the <b>input tape</b>, compile the <b>instructions</b>, and click on the <b>start button</b>.
+<p class="mb-box-sm text-center text-[0.8em]">
+	To start the simulation, load the <b>input tape</b>, compile the <b>instructions</b>, and click on
+	the <b>start button</b>.
 </p>
 
 <!-- ================================================= CSS -->

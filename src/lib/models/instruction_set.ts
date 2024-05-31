@@ -2,7 +2,6 @@ import Joi from 'joi';
 import Config from '../../config.json';
 import type { Transition } from './transition';
 
-
 export const TransitionSchema = Joi.object({
 	read: Joi.string().min(1).max(Config.maxAlphabetLength).required(),
 	to_state: Joi.string().min(1).max(Config.maxStateLength).required(),
