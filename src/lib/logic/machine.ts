@@ -8,6 +8,7 @@ const DEFAULT_HEAD_POSITION = 0;
 type Transitions = Immutable.Map<string, Transition[]>;
 type Parameters = Readonly<{
 	readonly finals: Immutable.List<string>;
+	readonly blank: string;
 	readonly transitions: Transitions;
 }>;
 
@@ -75,7 +76,7 @@ const step =
 		const previousTransition = cycle.transition;
 		const currentState = previousTransition.to_state;
 		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
-		const currentSymbol = tape.get(currentHeadPosition)!;
+		const currentSymbol = tape.get(currentHeadPosition) ?? parameters.blank;
 
 		if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit))
 			return {
@@ -112,6 +113,7 @@ export function run(
 ): Readonly<MachineOutput> {
 	// --------------------------- Parameters functional interfacing
 	const parameters = {
+		blank: instructionSet.blank,
 		finals: Immutable.List<string>(instructionSet.finals),
 		transitions: Immutable.Map<string, Transition[]>(
 			Object.entries(instructionSet.transitions).map(([key, value]) => [

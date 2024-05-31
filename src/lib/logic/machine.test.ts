@@ -70,7 +70,7 @@ describe('Turing machine infinite tape', () => {
 		const step_limit = 10;
 
 		const output = run(WRITE_RIGHT_INSTRUCTION_SET, ['1', '0'], step_limit);
-		expect(output.tape.toArray()).toEqual(Array(step_limit).fill('1'));
+		expect(output.tape.toArray()).toEqual(Array(step_limit + 1).fill('1'));
 	});
 
 	test('Infinite tape left and step limit', () => {
