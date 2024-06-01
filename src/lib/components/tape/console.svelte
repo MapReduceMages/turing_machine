@@ -8,6 +8,10 @@
 	import Config from '../../../config.json';
 	import SpeedStore from '$lib/stores/speed';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import Cookies from 'js-cookie';
+
+	const SPEED_COOKIE_LABEL = 'speed';
 
 	async function sleep(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
@@ -67,7 +71,20 @@
 		}
 	};
 
+	function handleSpeed() {
+		SpeedStore.switch();
+		Cookies.set(SPEED_COOKIE_LABEL, String($SpeedStore));
+	}
+
 	onMount(() => {
+		if (browser) {
+			const speedCookie = Cookies.get(SPEED_COOKIE_LABEL);
+
+			if (speedCookie) {
+				SpeedStore.set(Number(speedCookie));
+			}
+		}
+
 		return () => {
 			playing = false;
 		};
@@ -96,7 +113,7 @@
 				<Icon class="text-neutral-800" icon="material-symbols:play-arrow" width={20} />
 			</button>
 		{/if}
-		<button class="icon-btn" on:click={SpeedStore.switch}>
+		<button class="icon-btn" on:click={handleSpeed}>
 			{#if $SpeedStore === 0}
 				<Icon class="text-neutral-800" icon="mdi:storm" width={20} />
 			{:else}
