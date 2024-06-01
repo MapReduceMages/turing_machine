@@ -67,6 +67,29 @@ const getNextTransition =
 		new Error(
 			`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
 		);
+const checkTapeOverflow = (
+	tape: Tape,
+	headPosition: number,
+	blank: string,
+): {
+	checkedTape: Tape;
+	checkedHeadPosition: number;
+} => {
+	const tapeLength = tape.size;
+	const leftOverflow = headPosition < 0;
+	const rightOverflow = headPosition >= tapeLength;
+
+	if (leftOverflow) {
+		const checkedTape = tape.unshift(blank);
+		const checkedHeadPosition = headPosition + 1;
+		return { checkedTape, checkedHeadPosition };
+	} else if (rightOverflow) {
+		const checkedTape = tape.push(blank);
+		return { checkedTape, checkedHeadPosition: headPosition };
+	}
+
+	return { checkedTape: tape, checkedHeadPosition: headPosition };
+};
 
 // ------------------------------------------------ Turing main function
 const step =
@@ -75,8 +98,6 @@ const step =
 	(cycle: Cycle): Readonly<MachineOutput> => {
 		const previousTransition = cycle.transition;
 		const currentState = previousTransition.to_state;
-		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
-		const currentSymbol = tape.get(currentHeadPosition) ?? parameters.blank;
 
 		if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit))
 			return {
@@ -84,19 +105,26 @@ const step =
 				states: Immutable.List([cycle]),
 			};
 
+		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
+		const { checkedTape, checkedHeadPosition } = checkTapeOverflow(
+			tape,
+			currentHeadPosition,
+			parameters.blank,
+		);
+		const currentSymbol = checkedTape.get(checkedHeadPosition)!;
+
 		const nextTransition = getNextTransition(parameters.transitions)(cycle)(currentSymbol);
 		if (nextTransition instanceof Error)
-			return { tape, states: Immutable.List([cycle]), error: nextTransition };
-
-		visualize(tape, currentHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
+			return { tape: checkedTape, states: Immutable.List([cycle]), error: nextTransition };
+		visualize(checkedTape, checkedHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
 
 		const nextLimit = cycle.limit - 1;
 		const nextCycle = {
 			transition: nextTransition,
-			headPosition: currentHeadPosition,
+			headPosition: checkedHeadPosition,
 			limit: nextLimit,
 		};
-		const nextTape = updateTape(tape)(currentHeadPosition)(nextTransition.write);
+		const nextTape = updateTape(checkedTape)(checkedHeadPosition)(nextTransition.write);
 		const nextReturn = step(parameters)(nextTape)(nextCycle);
 
 		return {
