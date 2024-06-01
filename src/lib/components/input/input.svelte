@@ -24,6 +24,12 @@
 		StepStore.reset();
 	}
 
+	function handleSuggest() {
+		if ($InstructionSetStore !== null && $InstructionSetStore.inputSuggestion !== undefined) {
+			localInput = $InstructionSetStore.inputSuggestion;
+		}
+	}
+
 	let inputRespectAlphabet = false;
 	$: inputRespectAlphabet =
 		$InstructionSetStore !== null &&
@@ -33,7 +39,13 @@
 <!-- ================================================= CONTENT -->
 <header>
 	<h2>Input</h2>
-	<button class="!w-fit pr-3" on:click={() => {}} disabled={$OutputStore !== null}>
+	<button
+		class="!w-fit pr-3"
+		on:click={handleSuggest}
+		disabled={$OutputStore !== null ||
+			$InstructionSetStore === null ||
+			$InstructionSetStore.inputSuggestion === undefined}
+	>
 		<Icon class="text-neutral-800" icon="mdi:idea" width={16} />
 		<p class="ml-1">suggest</p>
 	</button>

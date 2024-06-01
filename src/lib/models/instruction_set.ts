@@ -11,6 +11,7 @@ export const TransitionSchema = Joi.object({
 
 export interface InstructionSet {
 	readonly name?: string; // Optional
+	readonly inputSuggestion?: string; // Optional
 	readonly alphabet: readonly string[];
 	readonly blank: string;
 	readonly states: readonly string[];
@@ -23,6 +24,7 @@ export interface InstructionSet {
 
 export const InstructionSetSchema = Joi.object({
 	name: Joi.string().optional(),
+	inputSuggestion: Joi.string().optional(),
 	alphabet: Joi.array().items(Joi.string().min(1).max(Config.maxAlphabetLength)).required(),
 	blank: Joi.string().min(1).max(Config.maxAlphabetLength).required(),
 	states: Joi.array().items(Joi.string().min(1).max(Config.maxStateLength)).min(1).required(),

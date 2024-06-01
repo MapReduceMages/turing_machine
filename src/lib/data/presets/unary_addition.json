@@ -1,3 +1,4 @@
 {
-	"name": "unary_addition"
+	"name": "unary_addition",
+	"inputSuggestion": "111+111="
 }
