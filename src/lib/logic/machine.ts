@@ -67,29 +67,30 @@ const getNextTransition =
 		new Error(
 			`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
 		);
-const checkTapeOverflow = (
-	tape: Tape,
-	headPosition: number,
-	blank: string,
-): {
-	checkedTape: Tape;
-	checkedHeadPosition: number;
-} => {
-	const tapeLength = tape.size;
-	const leftOverflow = headPosition < 0;
-	const rightOverflow = headPosition >= tapeLength;
+const checkTapeOverflow =
+	(blank: string) =>
+	(tape: Tape) =>
+	(
+		headPosition: number,
+	): {
+		readonly checkedTape: Tape;
+		readonly checkedHeadPosition: number;
+	} => {
+		const tapeLength = tape.size;
+		const leftOverflow = headPosition < 0;
+		const rightOverflow = headPosition >= tapeLength;
 
-	if (leftOverflow) {
-		const checkedTape = tape.unshift(blank);
-		const checkedHeadPosition = headPosition + 1;
-		return { checkedTape, checkedHeadPosition };
-	} else if (rightOverflow) {
-		const checkedTape = tape.push(blank);
-		return { checkedTape, checkedHeadPosition: headPosition };
-	}
+		if (leftOverflow) {
+			const checkedTape = tape.unshift(blank);
+			const checkedHeadPosition = headPosition + 1;
+			return { checkedTape, checkedHeadPosition };
+		} else if (rightOverflow) {
+			const checkedTape = tape.push(blank);
+			return { checkedTape, checkedHeadPosition: headPosition };
+		}
 
-	return { checkedTape: tape, checkedHeadPosition: headPosition };
-};
+		return { checkedTape: tape, checkedHeadPosition: headPosition };
+	};
 
 // ------------------------------------------------ Turing main function
 const step =
@@ -106,10 +107,8 @@ const step =
 			};
 
 		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
-		const { checkedTape, checkedHeadPosition } = checkTapeOverflow(
-			tape,
+		const { checkedTape, checkedHeadPosition } = checkTapeOverflow(parameters.blank)(tape)(
 			currentHeadPosition,
-			parameters.blank,
 		);
 		const currentSymbol = checkedTape.get(checkedHeadPosition)!;
 
