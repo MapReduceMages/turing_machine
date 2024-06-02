@@ -54,7 +54,8 @@ describe('Turing machine error handling', () => {
 describe('Turing machine simple programs', () => {
 	test('Simple increment', () => {
 		const output = run(INCREMENT_INSTRUCTION_SET, ['0', ' '], 10);
-		expect(output.tape.toArray()[0]).toEqual('1');
+		expect(output.tape.toArray()[0]).toEqual(INCREMENT_INSTRUCTION_SET.alphabet[1]);
+		expect(output.tape.toArray()[1]).toEqual(INCREMENT_INSTRUCTION_SET.alphabet[2]);
 		expect(output.error).toBeUndefined();
 	});
 });
@@ -62,7 +63,8 @@ describe('Turing machine simple programs', () => {
 describe('Turing machine infinite tape', () => {
 	test('Simple increment needs blank', () => {
 		const output = run(INCREMENT_INSTRUCTION_SET, ['0'], 10);
-		expect(output.tape.toArray()[0]).toEqual('1');
+		expect(output.tape.toArray()[0]).toEqual(INCREMENT_INSTRUCTION_SET.alphabet[1]);
+		expect(output.tape.toArray()[1]).toEqual(INCREMENT_INSTRUCTION_SET.alphabet[2]);
 		expect(output.error).toBeUndefined();
 	});
 
@@ -70,7 +72,10 @@ describe('Turing machine infinite tape', () => {
 		const step_limit = 10;
 
 		const output = run(WRITE_RIGHT_INSTRUCTION_SET, ['1', '0'], step_limit);
-		expect(output.tape.toArray()).toEqual(Array(step_limit).fill('1'));
+		expect(output.tape.toArray()).toEqual(
+			Array(step_limit + 1).fill(WRITE_RIGHT_INSTRUCTION_SET.alphabet[1]),
+		);
+		expect(output.error).toBeUndefined();
 	});
 
 	test('Infinite tape left and step limit', () => {
@@ -87,7 +92,10 @@ describe('Turing machine infinite tape', () => {
 
 		const step_limit = 10;
 
-		const output = run(long_tape_instruction_set, ['1'], step_limit);
-		expect(output.tape.toArray()).toEqual(Array(step_limit).fill('1'));
+		const output = run(long_tape_instruction_set, ['0'], step_limit);
+		expect(output.tape.toArray()).toEqual(
+			Array(step_limit).fill(long_tape_instruction_set.alphabet[1]),
+		);
+		expect(output.error).toBeUndefined();
 	});
 });
