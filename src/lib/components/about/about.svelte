@@ -3,7 +3,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<div id="about" class="mt-box flex flex-col gap-box-lg">
+<div id="about" class="mt-box flex flex-col gap-box-lg text-sm">
 	<h2 class="-mb-box">About</h2>
 	<section>
 		<p>

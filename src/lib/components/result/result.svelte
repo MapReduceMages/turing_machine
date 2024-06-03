@@ -5,7 +5,7 @@
 
 <!-- ================================================= CONTENT -->
 <div id="container-result" class="mt-box flex w-full flex-col items-center">
-	<header class="mb-1 flex w-full items-end justify-between">
+	<header class="mb-2 flex w-full items-end justify-between">
 		<h2 class="">Result</h2>
 		{#if $OutputStore !== null}
 			<p class="text-xs italic opacity-50">
@@ -13,7 +13,7 @@
 			</p>
 		{/if}
 	</header>
-	<div class="w-full rounded-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-xs">
+	<div class="w-full rounded-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-sm">
 		<li id="header">
 			<p class="italic">step</p>
 			<p class="italic">state</p>

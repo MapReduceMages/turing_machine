@@ -3,7 +3,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<ul class="w-full text-[0.8em]">
+<ul class="w-full text-[0.8em] md:text-sm">
 	<li>
 		<p>alphabet</p>
 		<p>list of symbols that can be written on the tape.</p>
@@ -61,6 +61,6 @@
 	}
 
 	ul > li > p:first-of-type {
-		@apply w-32 min-w-32 italic;
+		@apply w-32 min-w-32 italic md:w-52 md:min-w-32;
 	}
 </style>

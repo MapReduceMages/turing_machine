@@ -128,7 +128,7 @@
 		>
 	</div>
 </div>
-<p class="mb-box-sm text-center text-[0.8em]">
+<p class="mb-box-sm text-center md:text-left text-xs md:text-sm">
 	To start the simulation, load the <b>input tape</b>, compile the <b>instructions</b>, and click on
 	the <b>start button</b>.
 </p>

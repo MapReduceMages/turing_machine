@@ -238,23 +238,23 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<div id="instructions-container" class=" flex w-full flex-col items-center overflow-hidden">
+<div id="instructions-container" class="mt-box flex w-full flex-col items-center overflow-hidden">
 	<header>
-		<h2>Instructions</h2>
+		<h2 class="-mb-2">Instructions</h2>
 		<PresetSelector {handlePreset} bind:handlePresetBack />
 	</header>
 	<div
-		class="flex w-full items-center justify-between rounded-t-lg border-x border-t border-solid bg-neutral-200 px-2 py-1 text-xs"
+		class="flex w-full items-center justify-between rounded-t-lg border-x border-t border-solid bg-neutral-200 px-2 py-1 text-[0.9em] md:text-xs"
 	>
-		<p class="text-[0.9em] italic opacity-40">JSON format</p>
+		<p class=" italic opacity-40">JSON format</p>
 		<p
-			class="ml-auto mr-2 flex items-center text-[0.9em] italic transition-opacity duration-200"
+			class="ml-auto mr-2 flex items-center italic transition-opacity duration-200"
 			style="opacity: {$OutputStore !== null ? 0.7 : 0}"
 		>
 			<Icon class="text-red-500" icon="ri:lock-fill" width={12} />
 			<span class="ml-1 mr-5 text-red-500">read-only</span>
 		</p>
-		<p class="flex items-center text-right text-[0.9em]">
+		<p class="flex items-center text-right">
 			Line {cursorLine === null ? '?' : cursorLine}, Column {cursorColumn === null
 				? '?'
 				: cursorColumn}
