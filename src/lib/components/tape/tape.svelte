@@ -15,7 +15,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<h2 class="mb-2 w-full">Tape</h2>
+<h2 id="tape-section" class="mb-2 w-full">Tape</h2>
 <div id="tape" class="flex w-full flex-col items-center gap-box-sm">
 	<div
 		id="tape-visu"
@@ -49,7 +49,7 @@
 		</ul>
 	</div>
 </div>
-<div class="w-full rounded-b-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-xs">
+<div class="w-full rounded-b-lg bg-neutral-800 p-2 text-[0.8em] text-neutral-100 md:text-sm">
 	<ul class="flex flex-col gap-1">
 		<li class="grid grid-cols-5 opacity-65">
 			<p class="italic">step</p>

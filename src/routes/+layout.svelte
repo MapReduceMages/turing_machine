@@ -27,7 +27,7 @@
 	}
 
 	#global-center {
-		@apply flex w-full flex-col items-center justify-between overflow-hidden border-x border-solid border-neutral-800 px-10 md:w-[542px];
+		@apply flex w-full flex-col items-center justify-between overflow-hidden border-x border-solid border-neutral-800 px-box-lg md:w-[742px] md:px-10;
 		background-color: rgb(255, 238, 164);
 		min-height: 100vh;
 	}

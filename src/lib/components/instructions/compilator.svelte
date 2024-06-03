@@ -9,7 +9,7 @@
 
 <!-- ================================================= CONTENT -->
 <div id="compilator">
-	<p class="">
+	<p class="text-xs md:text-sm">
 		compilation
 		{#if empty}
 			<span class="text-blue-300">skipped</span>

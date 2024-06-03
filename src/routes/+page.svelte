@@ -9,7 +9,26 @@
 
 <!-- ================================================= CONTENT -->
 
-<p class="my-box max-w-[500px] text-center text-sm italic">
+<nav>
+	<ul class="flex flex-col items-center justify-center gap-1 text-lg md:flex-row md:gap-box-lg">
+		<li>
+			<a href="#tape-section">tape</a>
+		</li>
+		<li>
+			<a href="#input-section">input</a>
+		</li>
+		<li>
+			<a href="#instructions-container">instructions</a>
+		</li>
+		<li>
+			<a href="#container-result">results</a>
+		</li>
+		<li>
+			<a href="#about-section">about</a>
+		</li>
+	</ul>
+</nav>
+<p class="mb-box-sm mt-box max-w-[500px] text-center text-sm italic">
 	Simulate the Turing machine!<br />Observe its process of reading, writing, and moving, and explore
 	the basic principles of algorithmics and computability.
 </p>

@@ -14,7 +14,7 @@
 	function handleLoad() {
 		if ($InstructionSetStore !== null) {
 			TapeStore.load(localInput, $InstructionSetStore!.blank);
-			OutputStore.set(run($InstructionSetStore, $TapeStore.cells, $TapeStore.head, $MaxSetStore));
+			OutputStore.set(run($InstructionSetStore, $TapeStore.cells, $MaxSetStore));
 		}
 	}
 
@@ -37,7 +37,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<header>
+<header id="input-section" class="mt-box">
 	<h2>Input</h2>
 	<button
 		class="!w-fit pr-3"
@@ -74,10 +74,10 @@
 		</button>
 	</div>
 </div>
-<p class="mb-box-sm text-center text-[0.8em] md:text-left">
-	Compile the instructions below before loading the tape.
+<p class="mb-box-sm text-center text-xs md:text-left md:text-sm">
+	<b>Compile the instructions</b> below before loading the tape.
 	<br class="hidden md:block" />
-	You can only load characters that are in the tape's alphabet from the instructions below.
+	You can only load characters that are in the <b>tape's alphabet</b> from the instructions below.
 </p>
 
 <!-- ================================================= CSS -->

@@ -2,6 +2,10 @@
 	font-family: monospace;
 }
 
+html {
+	scroll-behavior: smooth;
+}
+
 ::-moz-selection {
 	/* Code for Firefox */
 	@apply bg-neutral-800;
