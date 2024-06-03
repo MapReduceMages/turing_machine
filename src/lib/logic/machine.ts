@@ -97,35 +97,66 @@ const step =
 	(parameters: Parameters) =>
 	(tape: Tape) =>
 	(cycle: Cycle): Readonly<MachineOutput> => {
+		// ----------------------------------------------------------------------- check final state or limit reached
 		const previousTransition = cycle.transition;
 		const currentState = previousTransition.to_state;
-
 		if (finalReached(parameters.finals)(currentState) || limitReached(cycle.limit))
-			return {
-				tape,
-				states: Immutable.List([cycle]),
-			};
+			return { tape, states: Immutable.List([cycle]) };
 
-		const currentHeadPosition = moveHead(cycle.headPosition)(previousTransition.action);
+		// ----------------------------------------------------------------------- check tape overflow
+		const currentHeadPosition = cycle.headPosition;
 		const { checkedTape, checkedHeadPosition } = checkTapeOverflow(parameters.blank)(tape)(
 			currentHeadPosition,
 		);
-		const currentSymbol = checkedTape.get(checkedHeadPosition)!;
 
-		const nextTransition = getNextTransition(parameters.transitions)(cycle)(currentSymbol);
-		if (nextTransition instanceof Error)
-			return { tape: checkedTape, states: Immutable.List([cycle]), error: nextTransition };
-		visualize(checkedTape, checkedHeadPosition, currentSymbol, previousTransition, nextTransition); // dbg, side effect
+		// ----------------------------------------------------------------------- read symbol
+		const currentSymbol = checkedTape.get(checkedHeadPosition);
+		if (currentSymbol === undefined)
+			return {
+				tape: checkedTape,
+				states: Immutable.List([cycle]),
+				error: new Error('Head position out of tape'),
+			};
 
+		// ----------------------------------------------------------------------- find the new transitions
+		const nextTransitions = parameters.transitions.get(currentState);
+		if (nextTransitions === undefined)
+			return {
+				tape: checkedTape,
+				states: Immutable.List([cycle]),
+				error: new Error('No transitions defined for state'),
+			};
+
+		// ----------------------------------------------------------------------- find the new transition
+		const nextTransition = nextTransitions.find((t) => t.read === currentSymbol);
+		if (nextTransition === undefined)
+			return {
+				tape: checkedTape,
+				states: Immutable.List([cycle]),
+				error: new Error('No transition defined for symbol'),
+			};
+
+		// ----------------------------------------------------------------------- write symbol
+		const nextTape = checkedTape.set(checkedHeadPosition, nextTransition.write);
+
+		// ----------------------------------------------------------------------- move head
+		const nextHeadPosition = moveHead(checkedHeadPosition)(nextTransition.action);
+
+		// ----------------------------------------------------------------------- define next cycle
 		const nextLimit = cycle.limit - 1;
 		const nextCycle = {
 			transition: nextTransition,
-			headPosition: checkedHeadPosition,
+			headPosition: nextHeadPosition,
 			limit: nextLimit,
 		};
-		const nextTape = updateTape(checkedTape)(checkedHeadPosition)(nextTransition.write);
+
+		// ----------------------------------------------------------------------- run next step
 		const nextReturn = step(parameters)(nextTape)(nextCycle);
 
+		// ----------------------------------------------------------------------- visualize
+		visualize(nextTape, checkedHeadPosition, currentSymbol, previousTransition, nextTransition);
+
+		// ----------------------------------------------------------------------- return next steps
 		return {
 			tape: nextReturn.tape,
 			states: nextReturn.states.push(cycle),
