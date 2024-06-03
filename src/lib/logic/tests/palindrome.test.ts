@@ -4,7 +4,6 @@ import PalindromeInstructionSet from '$lib/data/presets/palindrome.json';
 import type { InstructionSet } from '../../models/instruction_set';
 
 // =============================================== valid palindrome
-
 describe('valid odd number', () => {
 	const testInputs = [
 		['0', '1', '0'],
