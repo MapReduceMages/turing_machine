@@ -37,7 +37,7 @@
 </script>
 
 <!-- ================================================= CONTENT -->
-<header class="mt-box">
+<header id="input-section" class="mt-box">
 	<h2>Input</h2>
 	<button
 		class="!w-fit pr-3"
