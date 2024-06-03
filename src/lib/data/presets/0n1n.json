@@ -1,4 +1,37 @@
 {
 	"name": "0n1n",
-	"inputSuggestion": "000111"
+	"inputSuggestion": "000111",
+	"alphabet": [".", "0", "1", "y", "n"],
+	"blank": ".",
+	"states": ["new_search", "search_1", "search_end", "back_and_clean", "back", "clean_and_n"],
+	"initial": "new_search",
+	"finals": ["HALT"],
+	"transitions": {
+		"new_search": [
+			{ "read": ".", "to_state": "HALT", "write": "y", "action": "LEFT" },
+			{ "read": "0", "to_state": "search_1", "write": ".", "action": "RIGHT" },
+			{ "read": "1", "to_state": "clean_and_n", "write": ".", "action": "RIGHT" }
+		],
+		"search_1": [
+			{ "read": ".", "to_state": "clean_and_n", "write": ".", "action": "RIGHT" },
+			{ "read": "0", "to_state": "search_1", "write": "0", "action": "RIGHT" },
+			{ "read": "1", "to_state": "search_end", "write": "1", "action": "RIGHT" }
+		],
+		"search_end": [
+			{ "read": ".", "to_state": "back_and_clean", "write": ".", "action": "LEFT" },
+			{ "read": "0", "to_state": "clean_and_n", "write": ".", "action": "RIGHT" },
+			{ "read": "1", "to_state": "search_end", "write": "1", "action": "RIGHT" }
+		],
+		"back_and_clean": [{ "read": "1", "to_state": "back", "write": ".", "action": "LEFT" }],
+		"back": [
+			{ "read": "0", "to_state": "back", "write": "0", "action": "LEFT" },
+			{ "read": "1", "to_state": "back", "write": "1", "action": "LEFT" },
+			{ "read": ".", "to_state": "new_search", "write": ".", "action": "RIGHT" }
+		],
+		"clean_and_n": [
+			{ "read": "0", "to_state": "clean_and_n", "write": ".", "action": "RIGHT" },
+			{ "read": "1", "to_state": "clean_and_n", "write": ".", "action": "RIGHT" },
+			{ "read": ".", "to_state": "HALT", "write": "n", "action": "LEFT" }
+		]
+	}
 }
