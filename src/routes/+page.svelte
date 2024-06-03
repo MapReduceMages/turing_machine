@@ -10,7 +10,7 @@
 <!-- ================================================= CONTENT -->
 
 <nav>
-	<ul class="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-box-lg text-lg">
+	<ul class="flex flex-col items-center justify-center gap-1 text-lg md:flex-row md:gap-box-lg">
 		<li>
 			<a href="#tape-section">tape</a>
 		</li>
@@ -28,7 +28,7 @@
 		</li>
 	</ul>
 </nav>
-<p class="mt-box mb-box-sm max-w-[500px] text-center text-sm italic">
+<p class="mb-box-sm mt-box max-w-[500px] text-center text-sm italic">
 	Simulate the Turing machine!<br />Observe its process of reading, writing, and moving, and explore
 	the basic principles of algorithmics and computability.
 </p>

@@ -74,7 +74,7 @@
 		</button>
 	</div>
 </div>
-<p class="mb-box-sm text-center text-xs md:text-sm md:text-left">
+<p class="mb-box-sm text-center text-xs md:text-left md:text-sm">
 	<b>Compile the instructions</b> below before loading the tape.
 	<br class="hidden md:block" />
 	You can only load characters that are in the <b>tape's alphabet</b> from the instructions below.
