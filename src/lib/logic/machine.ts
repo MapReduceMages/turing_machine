@@ -1,27 +1,17 @@
 import Immutable from 'immutable';
-import type { InstructionSet, Transition, Direction } from '../models/instruction_set';
+import type { InstructionSet } from '../models/instruction_set';
+import type { Output } from '../models/output';
+import type { Tape } from '../models/tape';
+import type { Cycle } from '../models/cycle';
+import type { Transition, Transitions, Direction } from '../models/transition';
 
 // ------------------------------------------------ Turing types
 const SHIFT_STEP = 1;
-const DEFAULT_HEAD_POSITION = 0;
 
-type Transitions = Immutable.Map<string, Transition[]>;
 type Parameters = Readonly<{
 	readonly finals: Immutable.List<string>;
 	readonly blank: string;
 	readonly transitions: Transitions;
-}>;
-
-type Cycle = Readonly<{
-	readonly transition: Transition;
-	readonly headPosition: number;
-	readonly limit: number;
-}>;
-type Tape = Immutable.List<string>;
-type MachineOutput = Readonly<{
-	readonly tape: Tape;
-	readonly states: Immutable.List<Cycle>;
-	readonly error?: Error;
 }>;
 
 // ------------------------------------------------ Turing visualize
@@ -96,7 +86,7 @@ const checkTapeOverflow =
 const step =
 	(parameters: Parameters) =>
 	(tape: Tape) =>
-	(cycle: Cycle): Readonly<MachineOutput> => {
+	(cycle: Cycle): Readonly<Output> => {
 		// ----------------------------------------------------------------------- check final state or limit reached
 		const previousTransition = cycle.transition;
 		const currentState = previousTransition.to_state;
@@ -168,7 +158,7 @@ export function run(
 	instructionSet: InstructionSet,
 	tape: string[],
 	limit: number,
-): Readonly<MachineOutput> {
+): Readonly<Output> {
 	// --------------------------- Parameters functional interfacing
 	const parameters = {
 		blank: instructionSet.blank,
@@ -193,6 +183,7 @@ export function run(
 	const initialTape = Immutable.List(tape);
 	const machineWithParametersAndTape = machineWithParameters(initialTape);
 	// --------------------------- Cycle functional interfacing
+	const DEFAULT_HEAD_POSITION = 0;
 	const initialCycle = {
 		transition: <Transition>{
 			action: 'RIGHT', // not used

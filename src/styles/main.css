@@ -28,13 +28,22 @@ button,
 input,
 select,
 textarea {
-	@apply h-7 rounded-lg border border-solid border-black px-2;
+	@apply h-7 rounded-lg border border-solid border-black bg-neutral-100 px-2;
 }
 
 button:not(:disabled),
-input:not(:disabled),
 select:not(:disabled) {
-	@apply cursor-pointer;
+	@apply cursor-pointer hover:bg-neutral-200;
+}
+
+select:not(:disabled) > option {
+	@apply bg-neutral-100;
+}
+
+button:disabled,
+input:disabled,
+select:disabled {
+	@apply cursor-not-allowed opacity-50;
 }
 
 textarea {
@@ -45,15 +54,11 @@ textarea {
 
 button,
 select {
-	@apply bg-neutral-100 transition-all duration-200 hover:bg-neutral-300;
+	@apply bg-neutral-100 transition-all duration-200;
 }
 
 button > p {
 	@apply -mb-[1px];
-}
-
-button:disabled {
-	@apply cursor-not-allowed opacity-50 hover:!bg-neutral-100;
 }
 
 /* .inset-shadow:before {
@@ -122,29 +127,29 @@ a {
 	height: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-thumb {
-	@apply bg-neutral-300;
+	@apply bg-neutral-400;
 	border: 0px none #ffffff;
 	border-radius: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-thumb:hover {
-	@apply bg-neutral-300;
+	@apply bg-neutral-400;
 }
 .scrollbar-light::-webkit-scrollbar-thumb:active {
-	@apply bg-neutral-300;
+	@apply bg-neutral-400;
 }
 .scrollbar-light::-webkit-scrollbar-track {
-	@apply bg-neutral-100;
+	@apply bg-neutral-200;
 	border: 0px none #ffffff;
 	border-radius: 0px;
 }
 .scrollbar-light::-webkit-scrollbar-track:hover {
-	@apply bg-neutral-100;
+	@apply bg-neutral-200;
 }
 .scrollbar-light::-webkit-scrollbar-track:active {
-	@apply bg-neutral-100;
+	@apply bg-neutral-200;
 }
 .scrollbar-light::-webkit-scrollbar-corner {
-	@apply bg-neutral-300;
+	@apply bg-neutral-400;
 }
 /* --------- dark */
 .scrollbar-dark::-webkit-scrollbar {
@@ -161,10 +166,10 @@ a {
 	border-radius: 0px;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb:hover {
-	@apply bg-neutral-100;
+	@apply bg-neutral-200;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb:active {
-	@apply bg-neutral-100;
+	@apply bg-neutral-200;
 }
 .scrollbar-dark::-webkit-scrollbar-track {
 	@apply bg-neutral-800;

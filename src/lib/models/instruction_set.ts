@@ -1,14 +1,6 @@
 import Joi from 'joi';
 import Config from '../../config.json';
-
-export type Direction = Readonly<'LEFT' | 'RIGHT'>;
-
-export type Transition = Readonly<{
-	readonly read: string;
-	readonly write: string;
-	readonly to_state: string;
-	readonly action: Direction;
-}>;
+import type { Transition } from './transition';
 
 export const TransitionSchema = Joi.object({
 	read: Joi.string().min(1).max(Config.maxAlphabetLength).required(),
@@ -19,6 +11,7 @@ export const TransitionSchema = Joi.object({
 
 export interface InstructionSet {
 	readonly name?: string; // Optional
+	readonly inputSuggestion?: string; // Optional
 	readonly alphabet: readonly string[];
 	readonly blank: string;
 	readonly states: readonly string[];
@@ -31,6 +24,7 @@ export interface InstructionSet {
 
 export const InstructionSetSchema = Joi.object({
 	name: Joi.string().optional(),
+	inputSuggestion: Joi.string().optional(),
 	alphabet: Joi.array().items(Joi.string().min(1).max(Config.maxAlphabetLength)).required(),
 	blank: Joi.string().min(1).max(Config.maxAlphabetLength).required(),
 	states: Joi.array().items(Joi.string().min(1).max(Config.maxStateLength)).min(1).required(),

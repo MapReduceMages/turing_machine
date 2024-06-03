@@ -12,7 +12,7 @@
 <div id="global-layout">
 	<div id="global-center">
 		<Header />
-		<main class="flex w-full flex-col items-center">
+		<main class="flex w-full flex-col items-center overflow-hidden">
 			<slot />
 		</main>
 		<Footer />

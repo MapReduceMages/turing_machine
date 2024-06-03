@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import Config from '../../../../src/config.json';
+	import OutputStore from '$lib/stores/output';
 	// ------------------------- presets
 	import presetUnaryAddition from '../../data/presets/unary_addition.json';
 	import presetUnarySub from '../../data/presets/unary_sub.json';
@@ -59,6 +60,7 @@
 	class="text-xs"
 	on:change={handleSelect}
 	bind:this={selectElement}
+	disabled={$OutputStore !== null}
 >
 	<option value={Config.customPreset} disabled>{Config.customPreset}</option>
 	<option value="unary_addition">unary addition</option>

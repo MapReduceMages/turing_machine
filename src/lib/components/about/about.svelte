@@ -4,7 +4,7 @@
 
 <!-- ================================================= CONTENT -->
 <div id="about" class="mt-box flex flex-col gap-box-lg">
-	<h2>About</h2>
+	<h2 class="-mb-box">About</h2>
 	<section>
 		<p>
 			The <b

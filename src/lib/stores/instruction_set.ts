@@ -6,14 +6,17 @@ function generateDefaultStore(): Readonly<InstructionSet> | null {
 }
 
 function createInstructionSetStore() {
-	const { subscribe, set, update } = writable(generateDefaultStore());
+	const { subscribe, set } = writable(generateDefaultStore());
 
 	return {
 		subscribe,
-		set: (newInstructionSet: Object) => {},
+		reset: () => {
+			set(generateDefaultStore());
+		},
+		set,
 	};
 }
 
-const instructionSetStore = createInstructionSetStore();
+const InstructionSetStore = createInstructionSetStore();
 
-export default instructionSetStore;
+export default InstructionSetStore;

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import type { InstructionSet, Transition, Direction } from '../../models/instruction_set';
-import { run } from '../machine';
+import type { InstructionSet } from '../../models/instruction_set';
+import { run } from './../machine';
 
 const INCREMENT_INSTRUCTION_SET: InstructionSet = {
 	alphabet: ['0', '1', ' '],

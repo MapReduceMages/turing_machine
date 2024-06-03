@@ -1,56 +1,137 @@
 <!-- ================================================= SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import OutputStore from '$lib/stores/output';
+	import TapeStore from '$lib/stores/tape';
+	import StepStore from '$lib/stores/step';
+	import InstructionSetStore from '$lib/stores/instruction_set';
+	import Config from '../../../config.json';
+	import SpeedStore from '$lib/stores/speed';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import Cookies from 'js-cookie';
 
-	export let stop: () => void;
-	export let pause: () => void;
-	export let play: () => void;
-	export let back: () => void;
-	export let next: () => void;
-	export let reset: () => void;
+	const SPEED_COOKIE_LABEL = 'speed';
 
-	export let playing = false;
+	async function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
 
-	const INSTANT_SPEED = 0;
-	const speeds = [INSTANT_SPEED, 1, 2, 3, 10, 30];
-	let speed: number = speeds[1];
+	const pause = () => {
+		playing = false;
+	};
+
+	const beginning = async () => {
+		pause();
+		while ($StepStore > 0) {
+			previous();
+		}
+	};
+
+	let playing: boolean = false;
+
+	const play = async () => {
+		if (playing) {
+			return;
+		}
+
+		playing = true;
+
+		const lastStepIndex = $OutputStore!.states.count();
+		while ($StepStore < lastStepIndex) {
+			if (!playing) {
+				return;
+			}
+			next();
+			await sleep(Config.playDefaultSpeed / $SpeedStore);
+		}
+		playing = false;
+	};
+	const previous = () => {
+		const currentStepIndex = $StepStore;
+		if (currentStepIndex > 0) {
+			$StepStore--;
+			const previousStepIndex = $StepStore;
+			TapeStore.previous(
+				$OutputStore!.states.get(previousStepIndex)!,
+				$InstructionSetStore!.blank,
+				previousStepIndex === 0,
+			);
+		}
+	};
+	const next = () => {
+		const currentStepIndex = $StepStore;
+		if (currentStepIndex < $OutputStore!.states.count()) {
+			TapeStore.next(
+				$OutputStore!.states.get(currentStepIndex)!,
+				$InstructionSetStore!.blank,
+				currentStepIndex === 0,
+			);
+			$StepStore++;
+		}
+	};
 
 	function handleSpeed() {
-		speed = speeds[speeds.indexOf(speed) + 1] || INSTANT_SPEED;
+		SpeedStore.switch();
+		Cookies.set(SPEED_COOKIE_LABEL, String($SpeedStore));
 	}
+
+	onMount(() => {
+		if (browser) {
+			const speedCookie = Cookies.get(SPEED_COOKIE_LABEL);
+
+			if (speedCookie) {
+				SpeedStore.set(Number(speedCookie));
+			}
+		}
+
+		return () => {
+			playing = false;
+		};
+	});
 </script>
 
 <!-- ================================================= CONTENT -->
 <div id="console">
 	<div class="control-container">
-		<button class="icon-btn" on:click={back}
+		<button
+			class="icon-btn"
+			on:click={previous}
+			disabled={$OutputStore === null || $StepStore === 0}
 			><Icon class="text-neutral-800" icon="mdi:arrow-left-bold" width={20} /></button
 		>
-		<button class="icon-btn" on:click={stop}
+		<button class="icon-btn" on:click={beginning} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="material-symbols:stop" width={20} /></button
 		>
 
 		{#if playing}
-			<button class="icon-btn" on:click={pause}>
+			<button class="icon-btn" on:click={pause} disabled={$OutputStore === null}>
 				<Icon class="text-neutral-800" icon="material-symbols:pause" width={20} />
 			</button>
 		{:else}
-			<button class="icon-btn" on:click={play}>
+			<button class="icon-btn" on:click={play} disabled={$OutputStore === null}>
 				<Icon class="text-neutral-800" icon="material-symbols:play-arrow" width={20} />
 			</button>
 		{/if}
 		<button class="icon-btn" on:click={handleSpeed}>
-			{#if speed === 0}
+			{#if $SpeedStore === 0}
 				<Icon class="text-neutral-800" icon="mdi:storm" width={20} />
 			{:else}
-				<p>x{speed}</p>
+				<p>x{$SpeedStore}</p>
 			{/if}
 		</button>
-		<button class="icon-btn" on:click={next}
+		<button
+			class="icon-btn"
+			on:click={next}
+			disabled={$OutputStore === null || $StepStore === $OutputStore.states.count()}
 			><Icon class="text-neutral-800" icon="mdi:arrow-right-bold" width={20} /></button
 		>
 	</div>
 </div>
+<p class="mb-box-sm text-center text-[0.8em]">
+	To start the simulation, load the <b>input tape</b>, compile the <b>instructions</b>, and click on
+	the <b>start button</b>.
+</p>
 
 <!-- ================================================= CSS -->
 <style lang="postcss">
