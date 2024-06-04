@@ -7,7 +7,7 @@
       "request": "launch",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["tsx"],
-      "args": ["main.ts"],
+      "args": ["main.ts", "src/lib/data/presets/palindrome.json", "0001"],
       "cwd": "${workspaceRoot}",
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**", "node_modules/**"]

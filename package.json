@@ -23,8 +23,11 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^8.56.0",
+		"@types/node": "^20.13.0",
+		"@types/yargs": "^17.0.32",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
+		"arg": "^5.0.2",
 		"autoprefixer": "^10.4.19",
 		"daisyui": "^4.11.1",
 		"eslint": "^8.56.0",
@@ -50,6 +53,7 @@
 		"joi": "^17.13.1",
 		"js-cookie": "^3.0.5",
 		"json-stringify-pretty-compact": "^4.0.0",
-		"parse-json": "^8.1.0"
+		"parse-json": "^8.1.0",
+		"yargs": "^17.7.2"
 	}
 }
