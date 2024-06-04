@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import Cookies from 'js-cookie';
+	import MaxStore from '$lib/stores/max';
 
 	const SPEED_COOKIE_LABEL = 'speed';
 
@@ -105,11 +106,19 @@
 		>
 
 		{#if playing}
-			<button class="icon-btn" on:click={pause} disabled={$OutputStore === null}>
+			<button
+				class="icon-btn"
+				on:click={pause}
+				disabled={$OutputStore === null || $StepStore === $OutputStore.states.count()}
+			>
 				<Icon class="text-neutral-800" icon="material-symbols:pause" width={20} />
 			</button>
 		{:else}
-			<button class="icon-btn" on:click={play} disabled={$OutputStore === null}>
+			<button
+				class="icon-btn"
+				on:click={play}
+				disabled={$OutputStore === null || $StepStore === $OutputStore.states.count()}
+			>
 				<Icon class="text-neutral-800" icon="material-symbols:play-arrow" width={20} />
 			</button>
 		{/if}

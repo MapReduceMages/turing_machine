@@ -6,8 +6,9 @@
 	import { browser } from '$app/environment';
 	import Config from '../../../../src/config.json';
 	import OutputStore from '$lib/stores/output';
+	import type { InstructionSet } from '$lib/models/instruction_set';
 	// ------------------------- presets
-	import presetUnaryAddition from '../../data/presets/unary_addition.json';
+	import presetUnaryAdd from '../../data/presets/unary_add.json';
 	import presetUnarySub from '../../data/presets/unary_sub.json';
 	import presetPalindrome from '../../data/presets/palindrome.json';
 	import preset0n1n from '../../data/presets/0n1n.json';
@@ -22,12 +23,12 @@
 		Cookies.set('preset', newPreset);
 	};
 
-	const presetTable: ReadonlyMap<string, Object> = new Map([
-		['unary_addition', presetUnaryAddition],
-		['unary_sub', presetUnarySub],
-		['palindrome', presetPalindrome],
-		['0n1n', preset0n1n],
-		['02n', preset02n],
+	const presetTable: ReadonlyMap<string, InstructionSet> = new Map([
+		['unary_add', presetUnaryAdd as InstructionSet],
+		['unary_sub', presetUnarySub as InstructionSet],
+		['palindrome', presetPalindrome as InstructionSet],
+		['0n1n', preset0n1n as InstructionSet],
+		['02n', preset02n as InstructionSet],
 	]);
 
 	function handleSelect(event: Event) {
@@ -63,7 +64,7 @@
 	disabled={$OutputStore !== null}
 >
 	<option value={Config.customPreset} disabled>{Config.customPreset}</option>
-	<option value="unary_addition">unary addition</option>
+	<option value="unary_add">unary add</option>
 	<option value="unary_sub">unary sub</option>
 	<option value="palindrome">palindrome</option>
 	<option value="0n1n">0n1n</option>

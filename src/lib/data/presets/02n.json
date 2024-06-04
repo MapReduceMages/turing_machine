@@ -3,7 +3,7 @@
 	"inputSuggestion": "000",
 	"alphabet": [".", "0", "y", "n"],
 	"blank": ".",
-	"states": ["start", "even_check", "odd_check"],
+	"states": ["start", "even_check", "odd_check", "HALT"],
 	"initial": "start",
 	"finals": ["HALT"],
 	"transitions": {

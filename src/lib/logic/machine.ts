@@ -132,8 +132,6 @@ const step =
 		visualize(nextTape, checkedHeadPosition, currentSymbol, previousTransition, nextTransition);
 
 		// ----------------------------------------------------------------------- return next steps
-		console.log(cycle);
-
 		return {
 			tape: nextReturn.tape,
 			states: nextReturn.states.push(cycle),
