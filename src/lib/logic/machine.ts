@@ -42,24 +42,6 @@ const moveHead =
 	(headposition: number) =>
 		(direction: Direction): number =>
 			direction === 'LEFT' ? headposition - SHIFT_STEP : headposition + SHIFT_STEP;
-<<<<<<< HEAD
-=======
-const updateTape =
-	(tape: Tape) =>
-	(headPosition: number) =>
-	(newSymbol: string): Tape =>
-		tape.set(headPosition, newSymbol);
-const getNextTransition =
-	(transitions: Transitions) =>
-	(previousCycle: Cycle) =>
-	(currentSymbol: string): Transition | Error =>
-		transitions
-			.get(previousCycle.transition.to_state)
-			?.find((transition) => transition.read === currentSymbol) ??
-		new Error(
-			`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
-		);
->>>>>>> c268b99 ([Clean] format: run format)
 const checkTapeOverflow =
 	(blank: string) =>
 		(tape: Tape) =>
