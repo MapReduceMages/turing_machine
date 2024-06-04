@@ -9,25 +9,25 @@ import { InstructionSetSchema, type InstructionSet } from './src/lib/models/inst
 const formatInput = (input: string): string[] => input.split('');
 const validateInput =
 	(instructions: InstructionSet) =>
-	(input: string[]): Error | undefined => {
-		input.map((char) => {
-			if (!instructions.alphabet.includes(char)) {
-				return error(`Input contains invalid character: ${char}`);
-			}
-		});
-		return undefined;
-	};
+		(input: string[]): Error | undefined => {
+			input.map((char) => {
+				if (!instructions.alphabet.includes(char)) {
+					return error(`Input contains invalid character: ${char}`);
+				}
+			});
+			return undefined;
+		};
 
 // I/O, not pure by design, tryWrapper remedies this somewhat
 const tryWrapper =
 	(fn: Function) =>
-	(...params: any): any | Error => {
-		try {
-			return fn(...params);
-		} catch (error) {
-			return error;
-		}
-	};
+		(...params: any): any | Error => {
+			try {
+				return fn(...params);
+			} catch (error) {
+				return error;
+			}
+		};
 const readFile = (path: string): string | Error => tryWrapper(fs.readFileSync)(path, 'utf-8');
 const parsedInstructions: (text: string) => Object | Error = tryWrapper(JSON.parse);
 
@@ -67,6 +67,10 @@ const main = () => {
 	const args = getArgs();
 	const steps = args['steps'] as number;
 	const jsonFilePath = args['jsonfile'] as string;
+
+	if (steps <= 0) {
+		error('Number of steps must be greater than 0');
+	}
 
 	// read file
 	const fileContent = readFile(jsonFilePath);
