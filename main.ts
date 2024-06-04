@@ -4,6 +4,7 @@ import fs from 'fs';
 
 import { run } from './src/lib/logic/machine.ts';
 import { InstructionSetSchema, type InstructionSet } from './src/lib/models/instruction_set.ts';
+import { visualizeOutput } from './src/lib/view/display_result.ts';
 
 // Input
 const formatInput = (input: string): string[] => input.split('');
@@ -107,7 +108,7 @@ const main = () => {
 		error(result.error?.message ?? 'Unknown error during Turing machine execution');
 	}
 
-	// TODO separate visualizer
+	console.log(visualizeOutput(result));
 };
 
 main();
