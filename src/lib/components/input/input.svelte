@@ -14,8 +14,13 @@
 	function handleLoad() {
 		if ($InstructionSetStore !== null) {
 			TapeStore.load(localInput, $InstructionSetStore!.blank);
-			const output = run($InstructionSetStore, $TapeStore.cells, $MaxSetStore, Math.ceil($TapeStore.cells.length / 2));
-			console.log(output.states.toArray())
+			const output = run(
+				$InstructionSetStore,
+				$TapeStore.cells,
+				$MaxSetStore,
+				Math.ceil($TapeStore.cells.length / 2),
+			);
+			console.log(output.states.toArray());
 			OutputStore.set(output);
 		}
 	}
