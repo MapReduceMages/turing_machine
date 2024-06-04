@@ -5,10 +5,10 @@ function generateDefaultStore(): number {
 	return Config.steps.default;
 }
 
-function createMaxSetStore() {
+function createMaxStore() {
 	return writable(generateDefaultStore());
 }
 
-const MaxSetStore = createMaxSetStore();
+const MaxStore = createMaxStore();
 
-export default MaxSetStore;
+export default MaxStore;
