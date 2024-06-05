@@ -10,7 +10,6 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import Cookies from 'js-cookie';
-	import MaxStore from '$lib/stores/max';
 
 	const SPEED_COOKIE_LABEL = 'speed';
 
@@ -24,7 +23,7 @@
 
 	const beginning = async () => {
 		pause();
-		while ($StepStore > 0) {
+		while ($StepStore > 1) {
 			previous();
 		}
 	};
@@ -50,13 +49,12 @@
 	};
 	const previous = () => {
 		const currentStepIndex = $StepStore;
-		if (currentStepIndex > 0) {
+		if (currentStepIndex > 1) {
 			$StepStore--;
 			const previousStepIndex = $StepStore;
 			TapeStore.previous(
 				$OutputStore!.states.get(previousStepIndex)!,
 				$InstructionSetStore!.blank,
-				previousStepIndex === 0,
 			);
 		}
 	};
@@ -66,7 +64,6 @@
 			TapeStore.next(
 				$OutputStore!.states.get(currentStepIndex)!,
 				$InstructionSetStore!.blank,
-				currentStepIndex === 0,
 			);
 			$StepStore++;
 		}
@@ -98,13 +95,12 @@
 		<button
 			class="icon-btn"
 			on:click={previous}
-			disabled={$OutputStore === null || $StepStore === 0}
+			disabled={$OutputStore === null || $StepStore <= 1}
 			><Icon class="text-neutral-800" icon="mdi:arrow-left-bold" width={20} /></button
 		>
 		<button class="icon-btn" on:click={beginning} disabled={$OutputStore === null}
 			><Icon class="text-neutral-800" icon="material-symbols:stop" width={20} /></button
 		>
-
 		{#if playing}
 			<button
 				class="icon-btn"
