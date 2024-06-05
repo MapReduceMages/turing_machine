@@ -1,6 +1,6 @@
 {
 	"name": "palindrome",
-	"inputSuggestion": "000111",
+	"inputSuggestion": "10011001",
 	"alphabet": [".", "0", "1", "y", "n"],
 	"blank": ".",
 	"states": [

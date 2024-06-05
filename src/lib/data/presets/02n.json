@@ -1,6 +1,6 @@
 {
 	"name": "02n",
-	"inputSuggestion": "000",
+	"inputSuggestion": "0000",
 	"alphabet": [".", "0", "y", "n"],
 	"blank": ".",
 	"states": ["start", "even_check", "odd_check", "HALT"],
