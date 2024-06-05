@@ -47,7 +47,7 @@
 	onMount(() => {
 		if (browser) {
 			const savedPreset = Cookies.get('preset');
-			if (savedPreset && selectElement) {
+			if (savedPreset && selectElement !== null) {
 				selectElement.value = savedPreset;
 			}
 		}

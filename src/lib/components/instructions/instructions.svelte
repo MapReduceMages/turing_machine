@@ -139,6 +139,7 @@
 		cursorColumn = 1;
 	}
 
+	let first = true;
 	function compileInstructions(e?: any, force: boolean = false) {
 		if ($OutputStore !== null) return;
 		const newInstructions = e?.target?.value ?? instructions;
@@ -146,8 +147,10 @@
 		instructions = newInstructions;
 		if (lastPreset !== null && lastPresetInstructions === instructions) {
 			handlePresetBack(lastPreset);
-		} else {
+		} else if (!first) {
 			handlePresetBack();
+		} else {
+			first = false;
 		}
 
 		Cookies.set('instructions', instructions);
