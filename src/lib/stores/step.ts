@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import type { Output } from '../models/output';
 
 function generateDefaultStore(): number {
-	return 0;
+	return 1;
 }
 
 function createStepStore() {

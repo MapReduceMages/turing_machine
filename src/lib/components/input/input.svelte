@@ -18,7 +18,7 @@
 				$InstructionSetStore,
 				$TapeStore.cells,
 				$MaxSetStore,
-				Math.ceil($TapeStore.cells.length / 2),
+				Math.ceil($TapeStore.cells.length / 2) - 1,
 			);
 			console.log(output.states.toArray());
 			OutputStore.set(output);

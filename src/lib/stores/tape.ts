@@ -50,9 +50,9 @@ function createTapeStore() {
 				return tape;
 			});
 		},
-		next(cycle: Cycle, blank: string, first: boolean) {
+		next(cycle: Cycle, blank: string) {
 			update((tape) => {
-				if (!first) tape.cells[tape.head] = cycle.transition.write;
+				tape.cells[tape.head] = cycle.transition.write;
 				if (cycle.transition.action === 'LEFT') {
 					if (tape.head > 0) {
 						tape.head--;
@@ -70,7 +70,7 @@ function createTapeStore() {
 				return tape;
 			});
 		},
-		previous(cycle: Cycle, blank: string, first: boolean) {
+		previous(cycle: Cycle, blank: string) {
 			update((tape) => {
 				if (cycle.transition.action === 'LEFT') {
 					if (tape.head < tape.cells.length - 1) {
@@ -86,7 +86,7 @@ function createTapeStore() {
 						tape.center++;
 					}
 				}
-				if (!first) tape.cells[tape.head] = cycle.transition.read;
+				tape.cells[tape.head] = cycle.transition.read;
 
 				return tape;
 			});
