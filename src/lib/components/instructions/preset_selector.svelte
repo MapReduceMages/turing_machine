@@ -55,9 +55,9 @@
 				const value = 'palindrome';
 				Cookies.set('preset', value);
 				const preset = presetTable.get(value);
-			if (preset !== undefined) {
-				handlePreset(value, stringify(preset, { indent: Config.tabulation }));
-			}
+				if (preset !== undefined) {
+					handlePreset(value, stringify(preset, { indent: Config.tabulation }));
+				}
 			}
 		}
 	});
