@@ -47,8 +47,17 @@
 	onMount(() => {
 		if (browser) {
 			const savedPreset = Cookies.get('preset');
-			if (savedPreset && selectElement !== null) {
-				selectElement.value = savedPreset;
+			if (savedPreset) {
+				if (selectElement !== null) {
+					selectElement.value = savedPreset;
+				}
+			} else {
+				const value = 'palindrome';
+				Cookies.set('preset', value);
+				const preset = presetTable.get(value);
+				if (preset !== undefined) {
+					handlePreset(value, stringify(preset, { indent: Config.tabulation }));
+				}
 			}
 		}
 	});

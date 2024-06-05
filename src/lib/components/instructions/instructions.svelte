@@ -243,7 +243,7 @@
 <!-- ================================================= CONTENT -->
 <div id="instructions-container" class="mt-box flex w-full flex-col items-center overflow-hidden">
 	<header>
-		<h2 class="-mb-2">Instructions</h2>
+		<h2>Instructions</h2>
 		<PresetSelector {handlePreset} bind:handlePresetBack />
 	</header>
 	<div

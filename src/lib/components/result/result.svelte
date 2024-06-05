@@ -57,7 +57,7 @@
 	}
 	ul > li,
 	li#header {
-		@apply grid cursor-pointer grid-cols-5 opacity-70 transition-opacity duration-100 hover:opacity-100;
+		@apply grid grid-cols-5 opacity-70 transition-opacity duration-100 hover:opacity-100;
 	}
 	li#header {
 		@apply pb-1;
