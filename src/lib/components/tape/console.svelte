@@ -52,19 +52,13 @@
 		if (currentStepIndex > 1) {
 			$StepStore--;
 			const previousStepIndex = $StepStore;
-			TapeStore.previous(
-				$OutputStore!.states.get(previousStepIndex)!,
-				$InstructionSetStore!.blank,
-			);
+			TapeStore.previous($OutputStore!.states.get(previousStepIndex)!, $InstructionSetStore!.blank);
 		}
 	};
 	const next = () => {
 		const currentStepIndex = $StepStore;
 		if (currentStepIndex < $OutputStore!.states.count()) {
-			TapeStore.next(
-				$OutputStore!.states.get(currentStepIndex)!,
-				$InstructionSetStore!.blank,
-			);
+			TapeStore.next($OutputStore!.states.get(currentStepIndex)!, $InstructionSetStore!.blank);
 			$StepStore++;
 		}
 	};
@@ -92,10 +86,7 @@
 <!-- ================================================= CONTENT -->
 <div id="console">
 	<div class="control-container">
-		<button
-			class="icon-btn"
-			on:click={previous}
-			disabled={$OutputStore === null || $StepStore <= 1}
+		<button class="icon-btn" on:click={previous} disabled={$OutputStore === null || $StepStore <= 1}
 			><Icon class="text-neutral-800" icon="mdi:arrow-left-bold" width={20} /></button
 		>
 		<button class="icon-btn" on:click={beginning} disabled={$OutputStore === null}
