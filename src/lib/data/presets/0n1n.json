@@ -3,7 +3,15 @@
 	"inputSuggestion": "000111",
 	"alphabet": [".", "0", "1", "y", "n"],
 	"blank": ".",
-	"states": ["new_search", "search_1", "search_end", "back_and_clean", "back", "clean_and_n"],
+	"states": [
+		"new_search",
+		"search_1",
+		"search_end",
+		"back_and_clean",
+		"back",
+		"clean_and_n",
+		"HALT"
+	],
 	"initial": "new_search",
 	"finals": ["HALT"],
 	"transitions": {

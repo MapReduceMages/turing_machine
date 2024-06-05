@@ -42,21 +42,6 @@ const moveHead =
 	(headposition: number) =>
 	(direction: Direction): number =>
 		direction === 'LEFT' ? headposition - SHIFT_STEP : headposition + SHIFT_STEP;
-const updateTape =
-	(tape: Tape) =>
-	(headPosition: number) =>
-	(newSymbol: string): Tape =>
-		tape.set(headPosition, newSymbol);
-const getNextTransition =
-	(transitions: Transitions) =>
-	(previousCycle: Cycle) =>
-	(currentSymbol: string): Transition | Error =>
-		transitions
-			.get(previousCycle.transition.to_state)
-			?.find((transition) => transition.read === currentSymbol) ??
-		new Error(
-			`No transition defined for state ${previousCycle.transition.to_state} and symbol ${currentSymbol}`,
-		);
 const checkTapeOverflow =
 	(blank: string) =>
 	(tape: Tape) =>
@@ -158,6 +143,7 @@ export function run(
 	instructionSet: InstructionSet,
 	tape: string[],
 	limit: number,
+	headPosition: number = 0,
 ): Readonly<Output> {
 	// --------------------------- Parameters functional interfacing
 	const parameters = {
@@ -183,7 +169,6 @@ export function run(
 	const initialTape = Immutable.List(tape);
 	const machineWithParametersAndTape = machineWithParameters(initialTape);
 	// --------------------------- Cycle functional interfacing
-	const DEFAULT_HEAD_POSITION = 0;
 	const initialCycle = {
 		transition: <Transition>{
 			action: 'RIGHT', // not used
@@ -191,7 +176,7 @@ export function run(
 			read: '@', // not used
 			write: '@', // not used
 		},
-		headPosition: DEFAULT_HEAD_POSITION,
+		headPosition,
 		limit,
 	};
 	return machineWithParametersAndTape(initialCycle);
