@@ -1,101 +1,127 @@
-import Immutable from 'immutable';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import fs from 'fs';
+
 import { run } from './src/lib/logic/machine.ts';
-import type { InstructionSet } from './src/lib/models/instruction_set.ts';
+import {
+	InstructionSetSchema,
+	checkInstructionSet,
+	type InstructionSet,
+} from './src/lib/models/instruction_set.ts';
+import { visualizeOutput } from './src/lib/view/display_result.ts';
 
-const instructionSet: InstructionSet = {
-	alphabet: ['1', '.', '-', '='],
-	blank: '.',
-	states: ['scanright', 'eraseone', 'subone', 'skip', 'HALT'],
-	initial: 'scanright',
-	finals: ['HALT'],
-	transitions: {
-		scanright: [
-			{ read: '.', to_state: 'scanright', write: '.', action: 'RIGHT' },
-			{ read: '1', to_state: 'scanright', write: '1', action: 'RIGHT' },
-			{ read: '-', to_state: 'scanright', write: '-', action: 'RIGHT' },
-			{ read: '=', to_state: 'eraseone', write: '.', action: 'LEFT' },
-		],
-		eraseone: [
-			{ read: '1', to_state: 'subone', write: '=', action: 'LEFT' },
-			{ read: '-', to_state: 'HALT', write: '.', action: 'LEFT' },
-		],
-		subone: [
-			{ read: '1', to_state: 'subone', write: '1', action: 'LEFT' },
-			{ read: '-', to_state: 'skip', write: '-', action: 'LEFT' },
-		],
-		skip: [
-			{ read: '.', to_state: 'skip', write: '.', action: 'LEFT' },
-			{ read: '1', to_state: 'scanright', write: '.', action: 'RIGHT' },
-		],
-	},
+// Input
+const formatInput = (input: string): string[] => input.split('');
+const validateInput =
+	(instructions: InstructionSet) =>
+	(input: string[]): Error | undefined => {
+		input.map((char) => {
+			if (!instructions.alphabet.includes(char)) {
+				return error(`Input contains invalid character: ${char}`);
+			}
+		});
+		return undefined;
+	};
+
+// I/O, not pure by design, tryWrapper remedies this somewhat
+const tryWrapper =
+	(fn: Function) =>
+	(...params: any): any | Error => {
+		try {
+			return fn(...params);
+		} catch (error) {
+			return error;
+		}
+	};
+const readFile = (path: string): string | Error => tryWrapper(fs.readFileSync)(path, 'utf-8');
+const parsedInstructions: (text: string) => Object | Error = tryWrapper(JSON.parse);
+
+const error = (msg: string, yg?: any) => {
+	console.error('[ERROR]', msg);
+	if (yg) console.log(yg.help());
+	process.exit(1);
 };
 
-const instructionSetPalindrome: InstructionSet = {
-	alphabet: ['.', '0', '1', 'y', 'n'], // y = yes, n = no
-	blank: '.',
-	states: [
-		'new_search',
-		'search_0',
-		'search_0_confirmed',
-		'search_1',
-		'search_1_confirmed',
-		'back_to_left',
-		'back_and_clean_to_left',
-		'HALT',
-	],
-	initial: 'new_search',
-	finals: ['HALT'],
-	transitions: {
-		new_search: [
-			{ read: '.', to_state: 'HALT', write: 'y', action: 'RIGHT' }, // even number
-			{ read: '0', to_state: 'search_0', write: '.', action: 'RIGHT' },
-			{ read: '1', to_state: 'search_1', write: '.', action: 'RIGHT' },
-		],
-		search_0: [
-			{ read: '.', to_state: 'HALT', write: 'n', action: 'RIGHT' },
-			{ read: '0', to_state: 'search_0_confirmed', write: '0', action: 'RIGHT' },
-			{ read: '1', to_state: 'search_0', write: '1', action: 'RIGHT' },
-		],
-		search_0_confirmed: [
-			{ read: '.', to_state: 'back_and_clean_to_left', write: '.', action: 'LEFT' },
-			{ read: '0', to_state: 'search_0_confirmed', write: '0', action: 'RIGHT' },
-			{ read: '1', to_state: 'search_0', write: '1', action: 'RIGHT' },
-		],
-		search_1: [
-			{ read: '.', to_state: 'HALT', write: 'n', action: 'RIGHT' },
-			{ read: '0', to_state: 'search_1', write: '0', action: 'RIGHT' },
-			{ read: '1', to_state: 'search_1_confirmed', write: '1', action: 'RIGHT' },
-		],
-		search_1_confirmed: [
-			{ read: '.', to_state: 'back_and_clean_to_left', write: '.', action: 'LEFT' },
-			{ read: '0', to_state: 'search_1', write: '0', action: 'RIGHT' },
-			{ read: '1', to_state: 'search_1_confirmed', write: '1', action: 'RIGHT' },
-		],
-		back_and_clean_to_left: [
-			{ read: '0', to_state: 'back_and_check_odd_to_left', write: '.', action: 'LEFT' },
-			{ read: '1', to_state: 'back_and_check_odd_to_left', write: '.', action: 'LEFT' },
-		],
-		back_and_check_odd_to_left: [
-			{ read: '.', to_state: 'HALT', write: 'y', action: 'LEFT' }, // odd number
-			{ read: '0', to_state: 'back_to_left', write: '.', action: 'LEFT' },
-			{ read: '1', to_state: 'back_to_left', write: '.', action: 'LEFT' },
-		],
-		back_to_left: [
-			{ read: '.', to_state: 'new_search', write: '.', action: 'RIGHT' },
-			{ read: '0', to_state: 'back_to_left', write: '0', action: 'LEFT' },
-			{ read: '1', to_state: 'back_to_left', write: '1', action: 'LEFT' },
-		],
-	},
+const getArgs = () =>
+	yargs(hideBin(process.argv))
+		.command('$0 <jsonfile> <input>', 'run a turing machine')
+		.scriptName('ft_turing')
+		.usage('Usage: $0 <jsonfile> <input>')
+		.positional('jsonfile', {
+			describe: 'json description of the machine',
+			type: 'string',
+			demandOption: 'true',
+		})
+		.positional('input', {
+			describe: 'input of the machine',
+			type: 'string',
+			demandOption: 'true',
+		})
+		.option('steps', {
+			describe: 'number of steps to run the machine',
+			type: 'number',
+			default: 1337,
+		})
+		.fail((msg, _, yargs) => {
+			error(msg, yargs);
+		})
+		.strict()
+		.parse();
+
+const main = () => {
+	const args = getArgs();
+	const steps = args['steps'] as number;
+	const jsonFilePath = args['jsonfile'] as string;
+
+	if (steps <= 0) {
+		error('Number of steps must be greater than 0');
+	}
+
+	// read file
+	const fileContent = readFile(jsonFilePath);
+	if (typeof fileContent !== 'string') {
+		error(fileContent.message);
+	}
+	if (fileContent === '') {
+		error('File is empty');
+	}
+
+	// JSON load
+	const instructionsObj: Object | Error = parsedInstructions(fileContent as string);
+	if (instructionsObj instanceof Error) {
+		error(instructionsObj.message);
+	}
+
+	// validate instructions
+	const schemaValidation = InstructionSetSchema.validate(instructionsObj);
+	if (schemaValidation.error) {
+		error(schemaValidation.error.message);
+	}
+
+	const instructions = schemaValidation.value as InstructionSet;
+	const instructionValidation = checkInstructionSet(instructions);
+	if (instructionValidation != null) {
+		error(instructionValidation.message);
+	}
+
+	// input
+	const input = formatInput(args['input']);
+	const isInputValid = validateInput(instructions)(input);
+	if (isInputValid instanceof Error) {
+		error(isInputValid.message);
+	}
+
+	// run
+	const result = run(instructions, input, steps);
+	if (result.error !== undefined) {
+		error(result.error?.message ?? 'Unknown error during Turing machine execution');
+	}
+
+	console.log(visualizeOutput(input)(result));
+
+	const executed_steps = result.states.size;
+	if (executed_steps > steps)
+		console.log(`\n[Warning] Maximum step number (${steps}) exceeded. The machine could be stuck`);
 };
 
-// const initialTape = Immutable.List(['1', '1', '1', '-', '1', '1', '=', '.', '.']);
-const initialTapePalindrome = Immutable.List(['1', '0', '1']);
-
-try {
-	// const result = run(instructionSet, initialTape.toArray(), 100);
-	const result = run(instructionSetPalindrome, initialTapePalindrome.toArray(), 100);
-
-	// console.log(result.states.toArray());
-} catch (error: any) {
-	console.error(error.message);
-}
+main();
