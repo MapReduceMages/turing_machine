@@ -111,6 +111,10 @@ const main = () => {
 
 	// TODO check stuck
 	console.log(visualizeOutput(input)(result));
+
+	const executed_steps = result.states.size;
+	if (executed_steps > steps)
+		console.log(`\n[Warning] Maximum step number (${steps}) exceeded. The machine could be stuck`);
 };
 
 main();
