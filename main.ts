@@ -10,25 +10,25 @@ import { visualizeOutput } from './src/lib/view/display_result.ts';
 const formatInput = (input: string): string[] => input.split('');
 const validateInput =
 	(instructions: InstructionSet) =>
-		(input: string[]): Error | undefined => {
-			input.map((char) => {
-				if (!instructions.alphabet.includes(char)) {
-					return error(`Input contains invalid character: ${char}`);
-				}
-			});
-			return undefined;
-		};
+	(input: string[]): Error | undefined => {
+		input.map((char) => {
+			if (!instructions.alphabet.includes(char)) {
+				return error(`Input contains invalid character: ${char}`);
+			}
+		});
+		return undefined;
+	};
 
 // I/O, not pure by design, tryWrapper remedies this somewhat
 const tryWrapper =
 	(fn: Function) =>
-		(...params: any): any | Error => {
-			try {
-				return fn(...params);
-			} catch (error) {
-				return error;
-			}
-		};
+	(...params: any): any | Error => {
+		try {
+			return fn(...params);
+		} catch (error) {
+			return error;
+		}
+	};
 const readFile = (path: string): string | Error => tryWrapper(fs.readFileSync)(path, 'utf-8');
 const parsedInstructions: (text: string) => Object | Error = tryWrapper(JSON.parse);
 
@@ -89,6 +89,7 @@ const main = () => {
 	}
 
 	// validate instructions
+	// TODO validate more
 	const validation = InstructionSetSchema.validate(instructionsObj);
 	if (validation.error) {
 		error(validation.error.message);
@@ -108,7 +109,8 @@ const main = () => {
 		error(result.error?.message ?? 'Unknown error during Turing machine execution');
 	}
 
-	console.log(visualizeOutput(result));
+	// TODO check stuck
+	console.log(visualizeOutput(input)(result));
 };
 
 main();

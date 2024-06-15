@@ -14,24 +14,6 @@ type Parameters = Readonly<{
 	readonly transitions: Transitions;
 }>;
 
-// ------------------------------------------------ Turing visualize
-function visualize(
-	tape: Tape,
-	headPosition: number,
-	currentSymbol: string,
-	previousTransition: Transition,
-	nextTransition: Transition,
-) {
-	const tapeShow =
-		'[' +
-		tape
-			.map((symbol, index): string => (index === headPosition ? `<${symbol}>` : `${symbol}`))
-			.join('') +
-		']';
-	const transitionShow = `(${previousTransition.to_state}, ${currentSymbol}) -> (${nextTransition.to_state}, ${nextTransition.write}, ${nextTransition.action})`;
-	console.log(`${tapeShow} ${transitionShow}`);
-}
-
 // ------------------------------------------------ Turing helper functions
 const finalReached =
 	(finals: Immutable.List<string>) =>
@@ -123,13 +105,11 @@ const step =
 			transition: nextTransition,
 			headPosition: nextHeadPosition,
 			limit: nextLimit,
+			tape: checkedTape,
 		};
 
 		// ----------------------------------------------------------------------- run next step
 		const nextReturn = step(parameters)(nextTape)(nextCycle);
-
-		// ----------------------------------------------------------------------- visualize
-		visualize(nextTape, checkedHeadPosition, currentSymbol, previousTransition, nextTransition);
 
 		// ----------------------------------------------------------------------- return next steps
 		return {
@@ -178,6 +158,7 @@ export function run(
 		},
 		headPosition,
 		limit,
+		tape: initialTape,
 	};
 	return machineWithParametersAndTape(initialCycle);
 }
