@@ -3,7 +3,11 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 
 import { run } from './src/lib/logic/machine.ts';
-import { InstructionSetSchema, type InstructionSet } from './src/lib/models/instruction_set.ts';
+import {
+	InstructionSetSchema,
+	checkInstructionSet,
+	type InstructionSet,
+} from './src/lib/models/instruction_set.ts';
 import { visualizeOutput } from './src/lib/view/display_result.ts';
 
 // Input
@@ -89,12 +93,16 @@ const main = () => {
 	}
 
 	// validate instructions
-	// TODO validate more
-	const validation = InstructionSetSchema.validate(instructionsObj);
-	if (validation.error) {
-		error(validation.error.message);
+	const schemaValidation = InstructionSetSchema.validate(instructionsObj);
+	if (schemaValidation.error) {
+		error(schemaValidation.error.message);
 	}
-	const instructions = validation.value as InstructionSet;
+
+	const instructions = schemaValidation.value as InstructionSet;
+	const instructionValidation = checkInstructionSet(instructions);
+	if (instructionValidation != null) {
+		error(instructionValidation.message);
+	}
 
 	// input
 	const input = formatInput(args['input']);
@@ -109,7 +117,6 @@ const main = () => {
 		error(result.error?.message ?? 'Unknown error during Turing machine execution');
 	}
 
-	// TODO check stuck
 	console.log(visualizeOutput(input)(result));
 
 	const executed_steps = result.states.size;
