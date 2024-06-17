@@ -2,15 +2,13 @@
 
 A simple [Turing machine](https://en.wikipedia.org/wiki/Turing_machine) simulator with an infinite tape visualizer, implemented in [functional programming](https://en.wikipedia.org/wiki/Functional_programming) paradigm.
 
-![Recordit GIF](https://raw.githubusercontent.com/MapReduceMages/turing_machine/master/.demo/screenshots.gif)
+![Recordit GIF](https://raw.githubusercontent.com/MapReduceMages/turing_machine/master/.demo/tape.gif)
 
 - Select or create a new instruction set
 - load an input in the tape
 - run the machine
 - play with the tape visualization
 - check the output
-
-![Recordit GIF](https://raw.githubusercontent.com/MapReduceMages/turing_machine/master/.demo/tape.gif)
 
 # Setup
 
@@ -25,13 +23,15 @@ npm run dev
 # check localhost:5173
 ```
 
+![Recordit GIF](https://raw.githubusercontent.com/MapReduceMages/turing_machine/master/.demo/screenshots.gif)
+
 # Tests
 
 ```bash
 npm run test
 ```
 
-<img src="https://github.com/MapReduceMages/turing_machine/blob/main/.demo/tests.png" alt="tests" width="250"/>
+<img src="https://github.com/MapReduceMages/turing_machine/blob/main/.demo/tests.png" alt="tests" />
 
 # Algorithm
 
