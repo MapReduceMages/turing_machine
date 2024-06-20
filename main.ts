@@ -42,8 +42,8 @@ const error = (msg: string, yg?: any) => {
 	process.exit(1);
 };
 
-const getArgs = () =>
-	yargs(hideBin(process.argv))
+const getArgs = (args: string[]) =>
+	yargs(hideBin(args))
 		.command('$0 <jsonfile> <input>', 'run a turing machine')
 		.scriptName('ft_turing')
 		.usage('Usage: $0 <jsonfile> <input>')
@@ -69,7 +69,7 @@ const getArgs = () =>
 		.parse();
 
 const main = () => {
-	const args = getArgs();
+	const args = getArgs(process.argv);
 	const steps = args['steps'] as number;
 	const jsonFilePath = args['jsonfile'] as string;
 
